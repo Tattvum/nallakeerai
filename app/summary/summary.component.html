@@ -1,0 +1,23 @@
+<div class="box">
+  <div> <span class="title">{{ summary.title }}</span> &nbsp; (as at, 
+      <span class="link" (click)="click('datetime', false)">{{ summary.date }} {{ summary.time }}</span>) 
+  </div>
+  <div class="content">
+    <div>
+      <span class="value" (click)="click('bundles', false)">{{ summary.bundles }} </span>
+      <span class="total" (click)="click('bundles', true)"> / {{ summary.totalBundles }}</span> bundles
+    </div>
+    <div>
+      <span class="value" (click)="click('varieties', false)">{{ summary.varieties }} </span>
+      <span class="total" (click)="click('varieties', true)"> / {{ summary.totalVarieties }}</span> varieties
+    </div>
+    <div>
+      <span class="value" (click)="click('farms', false)">{{ summary.farms }} </span>
+      <span class="total" (click)="click('farms', true)"> / {{ summary.totalFarms }}</span> farms
+    </div>
+    <div>
+      <span class="value" (click)="click('locations', false)">{{ summary.locations }} </span>
+      <span class="total" (click)="click('locations', true)"> / {{ summary.totalLocations }}</span> locations
+    </div>
+  </div>
+</div>

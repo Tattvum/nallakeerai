@@ -1,0 +1,46 @@
+.box {
+  border: 1px solid gray; 
+  margin: 20px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.link {
+  color: darkslategrey;
+}
+.link:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+.title {
+  font-size: 24px;
+}
+
+.content {
+  text-align: center;
+}
+
+.special {
+  color: #0a0;
+}
+
+
+.total {
+  font-size: 30px;
+  color: darkslategrey;
+}
+.total:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+.message {
+  color: crimson;
+}
+
+th, td {
+  padding: 5px;
+  border: 1px solid grey;
+  text-align: center;
+}

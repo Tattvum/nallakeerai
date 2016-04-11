@@ -1,0 +1,11 @@
+<table class="box">
+  <tr *ngFor="#row of _rows">
+    <td *ngFor="#col of _COLS">
+      <span *ngIf="idx(row, col)<things.length">
+        <span class="link" [class.special]="things[idx(row, col)].isSpecial">
+          {{ things[idx(row, col)].name }}
+        </span>
+      </span> 
+    </td>
+  </tr>
+</table>

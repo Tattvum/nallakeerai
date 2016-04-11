@@ -1,0 +1,31 @@
+<table class="box">
+  <tr>
+    <th></th>
+    <th *ngFor="#variety of bundleWise.varieties">
+      {{variety}}
+    </th>
+    <th></th>
+  </tr>
+  
+  <tr *ngFor="#row of bundleWise.bundles; #i = index">
+    <th>
+      {{bundleWise.farms[i]}}
+    </th>    
+    <td *ngFor="#cell of row">
+      {{cell}}
+    </td>
+    <th>
+      {{_varietyTotals[i]}}
+    </th>
+  </tr>
+  
+  <tr>
+    <th></th>
+    <th *ngFor="#farmTotal of _farmTotals">
+      {{farmTotal}}
+    </th>
+    <th>
+      {{_total}}
+    </th>
+  </tr>
+</table>
