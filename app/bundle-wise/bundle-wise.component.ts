@@ -13,6 +13,7 @@ declare var __moduleName: string;
   selector: 'bundle-wise',
   templateUrl: 'bundle-wise.component.html',
   styleUrls: ['bundle-wise.component.css'],
+  providers:  [BundleWiseService],
 })
 export class BundleWiseComponent implements OnInit {
   _total: number = 0;

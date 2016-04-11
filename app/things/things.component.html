@@ -1,11 +1,13 @@
-<table class="box">
-  <tr *ngFor="#row of _rows">
-    <td *ngFor="#col of _COLS">
-      <span *ngIf="idx(row, col)<things.length">
-        <span class="link" [class.special]="things[idx(row, col)].isSpecial">
-          {{ things[idx(row, col)].name }}
-        </span>
-      </span> 
-    </td>
-  </tr>
-</table>
+<hr>
+
+<ul>
+    <li *ngFor="#thing of things" >
+        {{ thing.name }}
+      <a [class.special]="thing.isSpecial"
+          [routerLink]="['./Things', {kind:_kind, all: _all}]">
+        {{ thing.bundles }}
+      </a>
+    </li>
+</ul>
+
+<router-outlet></router-outlet>

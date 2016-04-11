@@ -13,16 +13,10 @@ declare var __moduleName: string;
   selector: 'summary',
   templateUrl: 'summary.component.html',
   styleUrls: ['summary.component.css'],
+  providers:  [SummaryService],
 })
 export class SummaryComponent implements OnInit {
-  @Input() summary: Summary = new Summary(
-    "Available Now!", 
-    1120, 3060, 
-    15, 40,
-    6, 21,
-    3, 5,
-    "2016-04-10", "10:41 AM"
-  );
+  @Input() summary: Summary;
   @Output() selected = new EventEmitter();
   
   constructor(private _service: SummaryService) {

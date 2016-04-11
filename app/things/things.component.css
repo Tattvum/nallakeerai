@@ -5,42 +5,34 @@
   font-size: 16px;
 }
 
-.link {
-  color: darkslategrey;
-}
-.link:hover {
-  color: blue;
+a {
   cursor: pointer;
+  cursor: hand;
+  text-decoration: none !important;
 }
-
-.title {
-  font-size: 24px;
-}
-
-.content {
-  text-align: center;
+a:hover { 
+  color: blue;
 }
 
 .special {
   color: #0a0;
 }
 
-
-.total {
-  font-size: 30px;
-  color: darkslategrey;
-}
-.total:hover {
-  color: blue;
-  cursor: pointer;
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
-.message {
-  color: crimson;
+li {
+  display: inline-block;
+  width: 50%;
 }
 
-th, td {
-  padding: 5px;
-  border: 1px solid grey;
-  text-align: center;
+@media screen and (min-width: 20em) {
+ 
+	li {
+    width: 10%;
+  }
+  
 }
