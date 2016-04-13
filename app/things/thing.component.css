@@ -1,0 +1,25 @@
+.box {
+  padding: 2px;
+  font-size: 16px;
+}
+
+:hover { 
+  color: blue;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.special {
+  border-radius: 5px;
+  background-color: aqua;
+  padding: 10px; 
+}
+
+.highlight {
+  color: #fff;
+  border-radius: 25px;
+  background: midnightblue;
+  padding: 10px; 
+  width: 150px;
+  height: 100px;
+}

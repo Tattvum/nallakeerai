@@ -2,11 +2,7 @@
 
 <ul>
     <li *ngFor="#thing of things" >
-        {{ thing.name }}
-      <a [class.special]="thing.isSpecial"
-          [routerLink]="['./Things', {kind:_kind, all: _all}]">
-        {{ thing.bundles }}
-      </a>
+      <thing [data]="thing" (selected)="click($event)" ></thing>
     </li>
 </ul>
 
