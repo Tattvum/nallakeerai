@@ -1,15 +1,15 @@
 <table class="box">
   <tr>
     <th></th>
-    <th *ngFor="#variety of bundleWise.varieties">
+    <th *ngFor="#variety of all.varieties">
       {{variety}}
     </th>
     <th></th>
   </tr>
   
-  <tr *ngFor="#row of bundleWise.bundles; #i = index">
+  <tr *ngFor="#row of all.bundles; #i = index">
     <th>
-      {{bundleWise.farms[i]}}
+      {{all.farms[i]}}
     </th>    
     <td *ngFor="#cell of row">
       {{cell}}

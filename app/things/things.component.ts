@@ -1,15 +1,15 @@
 import { Component, Input, Output, OnInit, EventEmitter } from 'angular2/core';
-import { NgForm }    from 'angular2/common';
 import {Router, RouteParams, RouteConfig, ROUTER_DIRECTIVES } from 'angular2/router';
 
 import { Thing }   from './thing';
 import { ThingsService }   from './things.service';
 import { ThingComponent } from './thing.component';
+import { BundleWiseComponent } from '../bundle-wise/bundle-wise.component';
 
 // Let TypeScript know about the special SystemJS __moduleName variable
 declare var __moduleName: string;
 
-@Component({ template: '' }) export class BlankComponent { }
+@Component({ template: '' }) export class BlankComponent { } // one-line component!
 
 @Component({
   moduleId: __moduleName,
@@ -22,6 +22,7 @@ declare var __moduleName: string;
 @RouteConfig([
   { path: '/', name: 'Blank', component: BlankComponent, useAsDefault: true },
   { path: '/things/...', name: 'Things', component: ThingsComponent },   //wow! recursive routs!!
+  { path: '/all', name: 'All', component: BundleWiseComponent },
 ])
 export class ThingsComponent implements OnInit {
 
@@ -35,7 +36,8 @@ export class ThingsComponent implements OnInit {
   click(thing: Thing) {
     this.things.forEach(th => th.isSpecial = false);
     thing.isSpecial = true;
-    this._router.navigate(['./Things', { path: this._path + "/" + thing.name }]);
+    if (thing.kind == "all") this._router.navigate(['All']);
+    else this._router.navigate(['./Things', { path: this._path + "/" + thing.name }]);
   }
 
   ngOnInit() {
