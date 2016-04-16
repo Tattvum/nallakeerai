@@ -1,8 +1,8 @@
 <table class="box">
   <tr>
     <th></th>
-    <th *ngFor="#variety of all.varieties">
-      {{variety}}
+    <th *ngFor="#plant of all.plants">
+      {{plant}}
     </th>
     <th></th>
   </tr>
@@ -14,17 +14,17 @@
     <td *ngFor="#cell of row">
       {{cell}}
     </td>
-    <th>
-      {{_varietyTotals[i]}}
+    <th class="total">
+      {{_plantsTotals[i]}}
     </th>
   </tr>
   
   <tr>
     <th></th>
-    <th *ngFor="#farmTotal of _farmTotals">
+    <th class="total" *ngFor="#farmTotal of _farmTotals">
       {{farmTotal}}
     </th>
-    <th>
+    <th class="total grand">
       {{_total}}
     </th>
   </tr>

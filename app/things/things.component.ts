@@ -2,9 +2,12 @@ import { Component, Input, Output, OnInit, EventEmitter } from 'angular2/core';
 import {Router, RouteParams, RouteConfig, ROUTER_DIRECTIVES } from 'angular2/router';
 
 import { Thing }   from './thing';
+import { Harvest }   from '../forms/harvest';
 import { ThingsService }   from './things.service';
 import { ThingComponent } from './thing.component';
 import { BundleWiseComponent } from '../bundle-wise/bundle-wise.component';
+import { FarmComponent } from '../farm/farm.component';
+import { HarvestFormComponent } from '../forms/harvest.form.component';
 
 // Let TypeScript know about the special SystemJS __moduleName variable
 declare var __moduleName: string;
@@ -23,25 +26,33 @@ declare var __moduleName: string;
   { path: '/', name: 'Blank', component: BlankComponent, useAsDefault: true },
   { path: '/things/...', name: 'Things', component: ThingsComponent },   //wow! recursive routs!!
   { path: '/all', name: 'All', component: BundleWiseComponent },
+  { path: '/farm/...', name: 'Farm', component: FarmComponent },
+  { path: '/harvest', name: 'Harvest', component: HarvestFormComponent },
 ])
 export class ThingsComponent implements OnInit {
 
   @Input() things: Thing[];
-  private _path: string;
+  private path: string;
 
-  constructor(private _service: ThingsService, private _router: Router, routeParams: RouteParams) {
-    this._path = routeParams.get('path');
+  constructor(private service: ThingsService, private router: Router, routeParams: RouteParams) {
+    this.path = routeParams.get('path');
+    console.log(this.path);
   }
 
   click(thing: Thing) {
     this.things.forEach(th => th.isSpecial = false);
     thing.isSpecial = true;
-    if (thing.kind == "all") this._router.navigate(['All']);
-    else this._router.navigate(['./Things', { path: this._path + "/" + thing.name }]);
+    let params = { path: this.path + "/" + thing.name };
+    if (thing.kind == "all") this.router.navigate(['All']);
+//    else if (thing.kind == "farm") this.router.navigate(['./Farm', params]);
+    else if (thing.kind == "beds") {
+      this.router.navigate(['./Harvest', 
+          {path: this.path + "/" + thing.name, bundles: thing.bundles }]);  
+    } else this.router.navigate(['./Things', params]);
   }
 
   ngOnInit() {
-    this._service.getThings(this._path).then(things => {
+    this.service.getThings(this.path).then(things => {
       this.things = things;
     });
   }

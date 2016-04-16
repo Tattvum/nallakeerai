@@ -17,13 +17,13 @@ export class ThingsService {
     if (path == null) {
       let sum = 0;
       for (var i = 0; i < SERVER_MOCK.farms.length; i++) {
-        for (var j = 0; j < SERVER_MOCK.varieties.length; j++) {
+        for (var j = 0; j < SERVER_MOCK.plants.length; j++) {
           sum += SERVER_MOCK.bundles[i][j];
         }
       }
       things.push({name: "Bundles", bundles: sum, kind: "all"});  
       things.push({name: "Farms", bundles: SERVER_MOCK.farms.length});  
-      things.push({name: "Varieties", bundles: SERVER_MOCK.varieties.length});  
+      things.push({name: "Plants", bundles: SERVER_MOCK.plants.length});  
       return Promise.resolve(things);
     }
     
@@ -36,19 +36,19 @@ export class ThingsService {
       if (part[1] == "Farms") {
         for (var i = 0; i < SERVER_MOCK.farms.length; i++) {
           let sum = 0;
-          for (var j = 0; j < SERVER_MOCK.varieties.length; j++) {
+          for (var j = 0; j < SERVER_MOCK.plants.length; j++) {
             sum += SERVER_MOCK.bundles[i][j];
           }
-          things.push({ name: SERVER_MOCK.farms[i], isSpecial:false, bundles: sum });
+          things.push({ name: SERVER_MOCK.farms[i], bundles: sum, kind: "farm" });
         }
         promise = Promise.resolve(things);
-      } else if (part[1] == "Varieties") {
-        for (var i = 0; i < SERVER_MOCK.varieties.length; i++) {
+      } else if (part[1] == "Plants") {
+        for (var i = 0; i < SERVER_MOCK.plants.length; i++) {
           let sum = 0;
           for (var j = 0; j < SERVER_MOCK.farms.length; j++) {
             sum += SERVER_MOCK.bundles[j][i];
           }
-          things.push({ name: SERVER_MOCK.varieties[i], isSpecial:false, bundles: sum });
+          things.push({ name: SERVER_MOCK.plants[i], bundles: sum });
         }
         promise = Promise.resolve(things);
       }
@@ -57,15 +57,15 @@ export class ThingsService {
       let n = +p[1];
       if (p[0] == "Farm") {
         let sum = 0;
-        for (var i = 0; i < SERVER_MOCK.varieties.length; i++) {
-          things.push({ name: SERVER_MOCK.varieties[i], isSpecial:false, 
+        for (var i = 0; i < SERVER_MOCK.plants.length; i++) {
+          things.push({ name: SERVER_MOCK.plants[i], kind: "beds",  
               bundles: SERVER_MOCK.bundles[n-1][i] });
         }
         promise = Promise.resolve(things);
       } else if (p[0] == "Keerai") {
         let sum = 0;
         for (var i = 0; i < SERVER_MOCK.farms.length; i++) {
-          things.push({ name: SERVER_MOCK.varieties[i], isSpecial:false, 
+          things.push({ name: SERVER_MOCK.farms[i], kind: "beds",  
               bundles: SERVER_MOCK.bundles[i][n-1] });
         }
         promise = Promise.resolve(things);
@@ -78,7 +78,8 @@ export class ThingsService {
 
 let SERVER_MOCK = {
   farms: ["Farm:1", "Farm:2", "Farm:3", "Farm:4", "Farm:5", "Farm:6", "Farm:7"],
-  varieties: [
+  beds: [160, 218, 274, 208, 285, 204, 192],
+  plants: [
       "Keerai:1", "Keerai:2", "Keerai:3", "Keerai:4", "Keerai:5", 
       "Keerai:6", "Keerai:7", "Keerai:8", "Keerai:9", "Keerai:10", 
       "Keerai:11", "Keerai:12", "Keerai:13", "Keerai:14", "Keerai:15"],

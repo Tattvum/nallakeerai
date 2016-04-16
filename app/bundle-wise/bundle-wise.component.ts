@@ -16,16 +16,16 @@ declare var __moduleName: string;
 export class BundleWiseComponent {
   _total: number = 0;
   _farmTotals: number[];
-  _varietyTotals: number[];
+  _plantsTotals: number[];
   
-  @Input() all;
+  all;
 
   constructor(private _service: ThingsService) {
     this._service.getAll().then(all => {
       this.all = all;
 
-      this._varietyTotals = new Array(this.all.bundles.length);
-      this._varietyTotals.fill(0, 0, this.all.bundles.length);
+      this._plantsTotals = new Array(this.all.bundles.length);
+      this._plantsTotals.fill(0, 0, this.all.bundles.length);
       this._farmTotals = new Array(this.all.bundles[0].length);
       this._farmTotals.fill(0, 0, this.all.bundles[0].length);
 
@@ -33,7 +33,7 @@ export class BundleWiseComponent {
         for (var j = 0; j < this.all.bundles[i].length; j++) {
           let cell = this.all.bundles[i][j];
           this._farmTotals[j] += cell;
-          this._varietyTotals[i] += cell;
+          this._plantsTotals[i] += cell;
           this._total += cell;
         }  
       }  
