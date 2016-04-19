@@ -11,32 +11,13 @@ declare var __moduleName: string;
   selector: 'bundle-wise',
   templateUrl: 'bundle-wise.component.html',
   styleUrls: ['bundle-wise.component.css'],
-  providers:  [ThingsService],
 })
 export class BundleWiseComponent {
-  _total: number = 0;
-  _farmTotals: number[];
-  _plantsTotals: number[];
-  
-  all;
+  private all;
 
   constructor(private _service: ThingsService) {
     this._service.getAll().then(all => {
       this.all = all;
-
-      this._plantsTotals = new Array(this.all.bundles.length);
-      this._plantsTotals.fill(0, 0, this.all.bundles.length);
-      this._farmTotals = new Array(this.all.bundles[0].length);
-      this._farmTotals.fill(0, 0, this.all.bundles[0].length);
-
-      for (var i = 0; i < this.all.bundles.length; i++) {
-        for (var j = 0; j < this.all.bundles[i].length; j++) {
-          let cell = this.all.bundles[i][j];
-          this._farmTotals[j] += cell;
-          this._plantsTotals[i] += cell;
-          this._total += cell;
-        }  
-      }  
     });   
   }
 

@@ -15,17 +15,17 @@
       {{cell}}
     </td>
     <th class="total">
-      {{_plantsTotals[i]}}
+      {{all.farmTotals[i].quantity}}
     </th>
   </tr>
   
   <tr>
     <th></th>
-    <th class="total" *ngFor="#farmTotal of _farmTotals">
-      {{farmTotal}}
+    <th class="total" *ngFor="#plantTotal of all.plantTotals">
+      {{plantTotal.quantity}}
     </th>
     <th class="total grand">
-      {{_total}}
+      {{all.grandTotal.quantity}}
     </th>
   </tr>
 </table>

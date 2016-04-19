@@ -2,7 +2,7 @@ import { Component, Input, Output, OnInit, EventEmitter } from 'angular2/core';
 import {Router, RouteParams, RouteConfig, ROUTER_DIRECTIVES } from 'angular2/router';
 
 import { Thing }   from './thing';
-import { Harvest }   from '../forms/harvest';
+import { Harvest }   from './harvest';
 import { ThingsService }   from './things.service';
 import { ThingComponent } from './thing.component';
 import { BundleWiseComponent } from '../bundle-wise/bundle-wise.component';
@@ -20,7 +20,6 @@ declare var __moduleName: string;
   templateUrl: 'things.component.html',
   styleUrls: ['things.component.css'],
   directives: [ROUTER_DIRECTIVES, ThingComponent],
-  providers: [ThingsService],
 })
 @RouteConfig([
   { path: '/', name: 'Blank', component: BlankComponent, useAsDefault: true },
@@ -31,7 +30,7 @@ declare var __moduleName: string;
 ])
 export class ThingsComponent implements OnInit {
 
-  @Input() things: Thing[];
+  @Input() things: any[];
   private path: string;
 
   constructor(private service: ThingsService, private router: Router, routeParams: RouteParams) {
@@ -39,22 +38,22 @@ export class ThingsComponent implements OnInit {
     console.log(this.path);
   }
 
-  click(thing: Thing) {
+  ngOnInit() {
+    this.service.getThings(this.path).then(things => {
+      this.things = things;
+    });
+  }
+
+  click(thing) {
     this.things.forEach(th => th.isSpecial = false);
     thing.isSpecial = true;
     let params = { path: this.path + "/" + thing.name };
     if (thing.kind == "all") this.router.navigate(['All']);
 //    else if (thing.kind == "farm") this.router.navigate(['./Farm', params]);
-    else if (thing.kind == "beds") {
-      this.router.navigate(['./Harvest', 
-          {path: this.path + "/" + thing.name, bundles: thing.bundles }]);  
+    else if (thing.kind == "end") {
+      console.log(this.service.getHarvest(thing.farm, thing.plant));
+      this.router.navigate(['./Harvest', {path: this.path + "/" + thing.name}]);  
     } else this.router.navigate(['./Things', params]);
-  }
-
-  ngOnInit() {
-    this.service.getThings(this.path).then(things => {
-      this.things = things;
-    });
   }
 
 }

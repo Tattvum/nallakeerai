@@ -2,6 +2,7 @@ import { Component, Input } from 'angular2/core';
 import { Router, RouteParams, RouteConfig, ROUTER_DIRECTIVES } from 'angular2/router';
 
 import { ThingsPlainComponent } from '../things/things.plain.component';
+import { ThingsComponent } from '../things/things.component';
 import { BundleWiseComponent } from '../bundle-wise/bundle-wise.component';
 
 // Let TypeScript know about the special SystemJS __moduleName variable
@@ -20,6 +21,7 @@ declare var __moduleName: string;
   { path: '/', name: 'Blank', component: BlankComponent, useAsDefault: true },
   { path: '/plants', name: 'Plants', component: ThingsPlainComponent },
   { path: '/beds', name: 'Beds', component: BundleWiseComponent },
+//  { path: '/things/...', name: 'Things', component: ThingsComponent },
 ])
 export class FarmComponent {
 
@@ -33,8 +35,9 @@ export class FarmComponent {
 
   click(where: string) {
     console.log(where + " " + this.path);
-    if (where == "plants") this.router.navigate(['Plants', { path: this.path }]);
-    else this.router.navigate(['Beds']);
+    if (where == "plants") this.router.navigate(['./Plants', { path: this.path }]);
+    else if (where == "things") this.router.navigate(['./Things', { path: this.path }]);
+    else this.router.navigate(['./Beds']);
   }
 
 }

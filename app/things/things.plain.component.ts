@@ -14,7 +14,6 @@ declare var __moduleName: string;
   templateUrl: 'things.plain.component.html',
   styleUrls: ['things.component.css'],
   directives: [ThingComponent],
-  providers: [ThingsService],
 })
 export class ThingsPlainComponent implements OnInit {
 

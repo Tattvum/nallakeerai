@@ -1,107 +1,150 @@
 import {Injectable} from 'angular2/core';
 
 import { Thing }   from './thing';
+import { Harvest }   from './harvest';
 
 @Injectable()
 export class ThingsService {
 
-  getAll() {
-    return Promise.resolve(SERVER_MOCK);
+//--------------------------------------------------------------------------------------
+
+  constructor() {
+    HARVEST_LOG = [];
+    let DAYS = ["2016-04-16", "2016-04-17", "2016-04-18"];
+    DAYS.forEach((dd, d) => {
+      FARMS.forEach((ff, f) => {
+        PLANTS.forEach((pp, p) => {
+          let quantity = Math.floor((Math.random() * 50) + 0);
+          HARVEST_LOG.push({day: DAYS[d], farm: f, plant: p, quantity: quantity});
+        })
+      })
+    });
+    
+    console.log("generation complete..."); 
+    this.computeGrid();
   }
+
+//--------------------------------------------------------------------------------------
+
+  computeGrid() {
+    GRID = [];
+    FARM_GRID = [];
+    PLANT_GRID = [];
+    FARM_TOTALS = [];
+    PLANT_TOTALS = [];
+    ALL_TOTAL.quantity = 0;
+
+    HARVEST_LOG.forEach(h => {      
+      if(h.day !== "2016-04-18") return;
+      
+      if (GRID[h.farm] == null) GRID[h.farm] = [];
+      if (GRID[h.farm][h.plant] == null) GRID[h.farm][h.plant] = 0;
+      GRID[h.farm][h.plant] += h.quantity;
+      ALL_TOTAL.quantity += h.quantity;
+
+      if (FARM_GRID[h.farm] == null) FARM_GRID[h.farm] = [];
+      if (FARM_GRID[h.farm][h.plant] == null) 
+          FARM_GRID[h.farm][h.plant] = {name: PLANTS[h.plant], quantity: 0, kind: "end", 
+              plant: h.plant, farm: h.farm};
+      FARM_GRID[h.farm][h.plant].quantity += h.quantity;
+
+      if (PLANT_GRID[h.plant] == null) PLANT_GRID[h.plant] = [];
+      if (PLANT_GRID[h.plant][h.farm] == null) 
+          PLANT_GRID[h.plant][h.farm] = {name: FARMS[h.farm], quantity: 0, kind: "end", 
+              plant: h.plant, farm: h.farm};
+      PLANT_GRID[h.plant][h.farm].quantity += h.quantity;
+
+      if (FARM_TOTALS[h.farm] == null) 
+          FARM_TOTALS[h.farm] = {name: FARMS[h.farm], quantity: 0};
+      FARM_TOTALS[h.farm].quantity += h.quantity;
+
+      if (PLANT_TOTALS[h.plant] == null) 
+          PLANT_TOTALS[h.plant] = {name: PLANTS[h.plant], quantity: 0};
+      PLANT_TOTALS[h.plant].quantity += h.quantity;
+    });
+    
+    console.log("computation complete..."); 
+  }
+
+//--------------------------------------------------------------------------------------
+
+  addHarvest(h: Harvest) {
+    console.log(h);
+    HARVEST_LOG.push(h);
+
+    PLANT_TOTALS[h.plant].quantity += h.quantity;
+    FARM_TOTALS[h.farm].quantity += h.quantity;
+    ALL_TOTAL.quantity += h.quantity;
+    GRID[h.farm][h.plant] += h.quantity;
+    FARM_GRID[h.farm][h.plant].quantity += h.quantity;
+    PLANT_GRID[h.plant][h.farm].quantity += h.quantity;
+  }
+
+  getHarvest(farm: number, plant: number) {
+    return GRID[farm][plant];
+  }
+
+//--------------------------------------------------------------------------------------
+
+  getAll() {
+    return Promise.resolve({
+      farms: FARMS, 
+      plants: PLANTS, 
+      bundles: GRID,
+      farmTotals: FARM_TOTALS,
+      plantTotals: PLANT_TOTALS,
+      grandTotal: ALL_TOTAL,
+    });
+  }
+
+//--------------------------------------------------------------------------------------
 
   getThings(path: string) {
     console.log(path);
     
-    let things: Thing[] = [];
-
-    if (path == null) {
-      let sum = 0;
-      for (var i = 0; i < SERVER_MOCK.farms.length; i++) {
-        for (var j = 0; j < SERVER_MOCK.plants.length; j++) {
-          sum += SERVER_MOCK.bundles[i][j];
-        }
-      }
-      things.push({name: "Bundles", bundles: sum, kind: "all"});  
-      things.push({name: "Farms", bundles: SERVER_MOCK.farms.length});  
-      things.push({name: "Plants", bundles: SERVER_MOCK.plants.length});  
+    if (path == null) {//summary list
+      let things: any[] = [];
+      things.push(ALL_TOTAL);  
+      things.push({name: "Farms", quantity: FARMS.length});  
+      things.push({name: "Plants", quantity: PLANTS.length});  
       return Promise.resolve(things);
     }
     
     let part = path.split("/");
-    let promise = thingBundlePromise;
+    let promise = null;
 
     console.log(part);
 
     if (part.length == 2) {
-      if (part[1] == "Farms") {
-        for (var i = 0; i < SERVER_MOCK.farms.length; i++) {
-          let sum = 0;
-          for (var j = 0; j < SERVER_MOCK.plants.length; j++) {
-            sum += SERVER_MOCK.bundles[i][j];
-          }
-          things.push({ name: SERVER_MOCK.farms[i], bundles: sum, kind: "farm" });
-        }
-        promise = Promise.resolve(things);
-      } else if (part[1] == "Plants") {
-        for (var i = 0; i < SERVER_MOCK.plants.length; i++) {
-          let sum = 0;
-          for (var j = 0; j < SERVER_MOCK.farms.length; j++) {
-            sum += SERVER_MOCK.bundles[j][i];
-          }
-          things.push({ name: SERVER_MOCK.plants[i], bundles: sum });
-        }
-        promise = Promise.resolve(things);
-      }
+      if (part[1] == "Farms") promise = Promise.resolve(FARM_TOTALS);
+      else if (part[1] == "Plants") promise = Promise.resolve(PLANT_TOTALS);
     } else if (part.length == 3) {
       let p = part[2].split(":"); 
       let n = +p[1];
-      if (p[0] == "Farm") {
-        let sum = 0;
-        for (var i = 0; i < SERVER_MOCK.plants.length; i++) {
-          things.push({ name: SERVER_MOCK.plants[i], kind: "beds",  
-              bundles: SERVER_MOCK.bundles[n-1][i] });
-        }
-        promise = Promise.resolve(things);
-      } else if (p[0] == "Keerai") {
-        let sum = 0;
-        for (var i = 0; i < SERVER_MOCK.farms.length; i++) {
-          things.push({ name: SERVER_MOCK.farms[i], kind: "beds",  
-              bundles: SERVER_MOCK.bundles[i][n-1] });
-        }
-        promise = Promise.resolve(things);
-      }
+      if (p[0] == "Farm") promise = Promise.resolve(FARM_GRID[n-1]);
+      else if (p[0] == "Keerai") promise = Promise.resolve(PLANT_GRID[n-1]); 
     }
 
+    if(promise === null) console.log("SPMETHING WRONG! The promise is null, beware!");
     return promise;
   }
+
 }
 
-let SERVER_MOCK = {
-  farms: ["Farm:1", "Farm:2", "Farm:3", "Farm:4", "Farm:5", "Farm:6", "Farm:7"],
-  beds: [160, 218, 274, 208, 285, 204, 192],
-  plants: [
-      "Keerai:1", "Keerai:2", "Keerai:3", "Keerai:4", "Keerai:5", 
-      "Keerai:6", "Keerai:7", "Keerai:8", "Keerai:9", "Keerai:10", 
-      "Keerai:11", "Keerai:12", "Keerai:13", "Keerai:14", "Keerai:15"],
-  bundles: [
-    [4, 8, 2, 1, 14, 5, 7, 12, 11, 4, 10, 6, 9, 0, 13], //farm wise
-    [9, 1, 3, 2, 14, 7, 4, 8, 7, 12, 13, 11, 13, 10, 5],
-    [14, 10, 4, 2, 1, 8, 7, 11, 1, 5, 14, 3, 3, 9, 12],
-    [4, 6, 11, 15, 5, 13, 15, 12, 8, 13, 10, 7, 6, 2, 9],
-    [15, 5, 8, 15, 11, 6, 12, 3, 6, 15, 11, 9, 4, 2, 1],
-    [2, 5, 14, 15, 6, 3, 9, 8, 11, 1, 10, 15, 13, 6, 12],
-    [8, 1, 2, 5, 11, 4, 9, 3, 7, 10, 13, 4, 12, 7, 14],
-  ],
-};
+//--------------------------------------------------------------------------------------
 
-let THING_BUNDLES: Thing[] = [
-  { name: "Thing6", isSpecial: true, bundles: 15 },
-  { name: "Thing8", isSpecial: false, bundles: 31 },
-  { name: "Thing11", isSpecial: true, bundles: 70 },
-  { name: "Thing12", isSpecial: false, bundles: 41 },
-  { name: "Thing9", isSpecial: true, bundles: 30 },
-  { name: "Thing13", isSpecial: false, bundles: 23 },
-];
+let HARVEST_LOG: Harvest[];
 
-var thingBundlePromise = Promise.resolve(THING_BUNDLES);
+let GRID: number[][] = [];
+let FARM_GRID = [];
+let PLANT_GRID = [];
+let FARM_TOTALS: Thing[] = [];
+let PLANT_TOTALS: Thing[] = [];
+let ALL_TOTAL: Thing = {name: "Bundles", quantity: 0, kind: "all"};
+    
+let FARMS = ["Farm:1", "Farm:2", "Farm:3", "Farm:4", "Farm:5", "Farm:6", "Farm:7"];
+let PLANTS = [
+    "Keerai:1", "Keerai:2", "Keerai:3", "Keerai:4", "Keerai:5", 
+    "Keerai:6", "Keerai:7", "Keerai:8", "Keerai:9", "Keerai:10", 
+    "Keerai:11", "Keerai:12", "Keerai:13", "Keerai:14", "Keerai:15"];
 

@@ -2,7 +2,7 @@
   <span class="value">{{ harvest.quantity }}</span> bundles of
   <span class="value">{{ harvest.plant }}</span> harvested 
   for the farm <span class="value">{{ harvest.farm }}</span> 
-  on <span class="value">{{harvest.date}}</span>: 
+  on <span class="value">{{harvest.day}}</span>: 
 </h3>
 
 <div [hidden]="submitted">
@@ -22,11 +22,6 @@
 
 <div [hidden]="!submitted">
   <div class="container">
-    <div class="row">
-      <div>Bundles</div>
-      <div>{{ harvest.quantity }}</div>
-    </div>
-    <br>
-    <button class="btn btn-default" (click)="submitted=false">Edit</button>
+    <button class="btn btn-default" (click)="submitted=false">Add New</button>
   </div>
 </div>

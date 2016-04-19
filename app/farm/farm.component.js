@@ -46,9 +46,11 @@ System.register(['angular2/core', 'angular2/router', '../things/things.plain.com
                 FarmComponent.prototype.click = function (where) {
                     console.log(where + " " + this.path);
                     if (where == "plants")
-                        this.router.navigate(['Plants', { path: this.path }]);
+                        this.router.navigate(['./Plants', { path: this.path }]);
+                    else if (where == "things")
+                        this.router.navigate(['./Things', { path: this.path }]);
                     else
-                        this.router.navigate(['Beds']);
+                        this.router.navigate(['./Beds']);
                 };
                 __decorate([
                     core_1.Input(), 

@@ -1,6 +1,6 @@
 export interface Thing {
-  name: string;
+  name?: string;
   isSpecial?: boolean;
-  bundles: number;
+  quantity: number;
   kind?: string;
 }

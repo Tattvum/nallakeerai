@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', './harvest'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', '../things/things.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', './harvest'], function(expo
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, harvest_1;
+    var core_1, router_1, things_service_1;
     var HarvestFormComponent;
     return {
         setters:[
@@ -20,16 +20,16 @@ System.register(['angular2/core', 'angular2/router', './harvest'], function(expo
             function (router_1_1) {
                 router_1 = router_1_1;
             },
-            function (harvest_1_1) {
-                harvest_1 = harvest_1_1;
+            function (things_service_1_1) {
+                things_service_1 = things_service_1_1;
             }],
         execute: function() {
             HarvestFormComponent = (function () {
-                function HarvestFormComponent(routeParams) {
+                function HarvestFormComponent(service, routeParams) {
+                    this.service = service;
                     this.routeParams = routeParams;
-                    this.harvest = new harvest_1.Harvest("123", "2016-04-16", "Farm1", "Keerai2", 10);
+                    this.harvest = { day: "2016-04-18", farm: "Farm:1", plant: "Keerai:2", quantity: 10 };
                     this.submitted = true;
-                    this.harvest.quantity = +routeParams.get('bundles');
                     var parts = routeParams.get('path').split("/");
                     var fid = 2;
                     var pid = 3;
@@ -39,10 +39,17 @@ System.register(['angular2/core', 'angular2/router', './harvest'], function(expo
                     }
                     this.harvest.farm = parts[fid];
                     this.harvest.plant = parts[pid];
+                    this.harvest.quantity = 0;
                 }
                 HarvestFormComponent.prototype.onSubmit = function () {
                     this.submitted = true;
                     console.log(this.harvest);
+                    this.service.addHarvest({
+                        day: this.harvest.day,
+                        farm: +this.harvest.farm.split(":")[1] - 1,
+                        plant: +this.harvest.plant.split(":")[1] - 1,
+                        quantity: this.harvest.quantity,
+                    });
                 };
                 HarvestFormComponent.prototype.newHarvest = function () {
                     // this.harvest = new Harvest(42, '', '', '');
@@ -54,7 +61,7 @@ System.register(['angular2/core', 'angular2/router', './harvest'], function(expo
                         templateUrl: 'harvest.form.component.html',
                         styleUrls: ['harvest.form.component.css'],
                     }), 
-                    __metadata('design:paramtypes', [router_1.RouteParams])
+                    __metadata('design:paramtypes', [things_service_1.ThingsService, router_1.RouteParams])
                 ], HarvestFormComponent);
                 return HarvestFormComponent;
             }());
