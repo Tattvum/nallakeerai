@@ -14,7 +14,7 @@ declare var __moduleName: string;
   styleUrls: ['harvest.form.component.css'],
 })
 export class HarvestFormComponent {
-  harvest = {day: "2016-04-18", farm: "Farm:1", plant: "Keerai:2", quantity: 10};
+  harvest = {day: "---", farm: "---", plant: "---", quantity: 0};
   submitted = true;
 
   constructor(private service: ThingsService, private routeParams: RouteParams) {
@@ -24,6 +24,7 @@ export class HarvestFormComponent {
     this.harvest.farm = parts[fid];
     this.harvest.plant = parts[pid];
     this.harvest.quantity = 0;
+    this.harvest.day = service.getDay();
   }
 
   onSubmit() {
@@ -37,7 +38,4 @@ export class HarvestFormComponent {
     });
   }
 
-  newHarvest() {
-    // this.harvest = new Harvest(42, '', '', '');
-  }
 }

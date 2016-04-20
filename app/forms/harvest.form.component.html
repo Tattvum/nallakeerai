@@ -1,9 +1,12 @@
+<!--
 <h3>
   <span class="value">{{ harvest.quantity }}</span> bundles of
   <span class="value">{{ harvest.plant }}</span> harvested 
   for the farm <span class="value">{{ harvest.farm }}</span> 
   on <span class="value">{{harvest.day}}</span>: 
 </h3>
+-->
+<hr>
 
 <div [hidden]="submitted">
   <div class="container">
@@ -11,7 +14,7 @@
 
       <div class="form-group">
         <label for="comment">Bundles</label>
-        <input type="number" class="form-control" [(ngModel)]="harvest.quantity">
+        <input type="number" class="form-control" autofocus [(ngModel)]="harvest.quantity">
       </div>
 
       <button type="submit" class="btn btn-default" [disabled]="!harvestForm.form.valid">Save</button>
@@ -22,6 +25,6 @@
 
 <div [hidden]="!submitted">
   <div class="container">
-    <button class="btn btn-default" (click)="submitted=false">Add New</button>
+    <button class="btn btn-default" (click)="submitted=false">Add New Harvest</button>
   </div>
 </div>

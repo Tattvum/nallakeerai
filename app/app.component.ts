@@ -5,6 +5,7 @@ import { HarvestFormComponent } from './forms/harvest.form.component';
 import { ThingsComponent } from './things/things.component';
 import { PersonFormComponent } from './person/person-form.component';
 import { FarmComponent } from './farm/farm.component';
+import { WhenComponent } from './when/when.component';
 
 import { ThingsService } from './things/things.service';
 
@@ -16,7 +17,7 @@ declare var __moduleName: string;
   selector: 'app',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.css'],
-  directives: [ROUTER_DIRECTIVES],
+  directives: [ROUTER_DIRECTIVES, WhenComponent],
   providers: [ThingsService],
 })
 @RouteConfig([

@@ -28,7 +28,7 @@ System.register(['angular2/core', 'angular2/router', '../things/things.service']
                 function HarvestFormComponent(service, routeParams) {
                     this.service = service;
                     this.routeParams = routeParams;
-                    this.harvest = { day: "2016-04-18", farm: "Farm:1", plant: "Keerai:2", quantity: 10 };
+                    this.harvest = { day: "---", farm: "---", plant: "---", quantity: 0 };
                     this.submitted = true;
                     var parts = routeParams.get('path').split("/");
                     var fid = 2;
@@ -40,6 +40,7 @@ System.register(['angular2/core', 'angular2/router', '../things/things.service']
                     this.harvest.farm = parts[fid];
                     this.harvest.plant = parts[pid];
                     this.harvest.quantity = 0;
+                    this.harvest.day = service.getDay();
                 }
                 HarvestFormComponent.prototype.onSubmit = function () {
                     this.submitted = true;
@@ -50,9 +51,6 @@ System.register(['angular2/core', 'angular2/router', '../things/things.service']
                         plant: +this.harvest.plant.split(":")[1] - 1,
                         quantity: this.harvest.quantity,
                     });
-                };
-                HarvestFormComponent.prototype.newHarvest = function () {
-                    // this.harvest = new Harvest(42, '', '', '');
                 };
                 HarvestFormComponent = __decorate([
                     core_1.Component({

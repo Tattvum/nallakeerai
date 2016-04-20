@@ -5,12 +5,12 @@ import { Harvest }   from './harvest';
 
 @Injectable()
 export class ThingsService {
-
+  
 //--------------------------------------------------------------------------------------
 
   constructor() {
     HARVEST_LOG = [];
-    let DAYS = ["2016-04-16", "2016-04-17", "2016-04-18"];
+    let DAYS = ["2016-04-19", "2016-04-20", "2016-04-21"];
     DAYS.forEach((dd, d) => {
       FARMS.forEach((ff, f) => {
         PLANTS.forEach((pp, p) => {
@@ -26,44 +26,81 @@ export class ThingsService {
 
 //--------------------------------------------------------------------------------------
 
-  computeGrid() {
-    GRID = [];
-    FARM_GRID = [];
-    PLANT_GRID = [];
-    FARM_TOTALS = [];
-    PLANT_TOTALS = [];
+  getDay(): string {
+    return date;    
+  }
+  
+  setDay(dt: string) {
+    date = dt;
+    console.log(date);
+    this.computeGrid();
+  }
+
+//--------------------------------------------------------------------------------------
+
+  ensureNonNullGrid() {
+    if(ALL_TOTAL == null) ALL_TOTAL = {name: "Bundles", quantity: 0, kind: "all"};
+    FARMS.forEach((ff, f) => {
+      if (FARM_TOTALS[f] == null) FARM_TOTALS[f] = {name: ff, quantity: 0};
+    });
+    PLANTS.forEach((pp, p) => {
+      if (PLANT_TOTALS[p] == null) PLANT_TOTALS[p] = {name: pp, quantity: 0};
+    });
+    FARMS.forEach((ff, f) => {
+      PLANTS.forEach((pp, p) => {
+        if (GRID[f] == null) GRID[f] = [];
+        if (GRID[f][p] == null) GRID[f][p] = 0;
+
+        if (FARM_GRID[f] == null) FARM_GRID[f] = [];
+        if (FARM_GRID[f][p] == null) 
+            FARM_GRID[f][p] = {name: PLANTS[p], quantity: 0, kind: "end", plant: p, farm: f};
+
+        if (PLANT_GRID[p] == null) PLANT_GRID[p] = [];
+        if (PLANT_GRID[p][f] == null) 
+            PLANT_GRID[p][f] = {name: FARMS[f], quantity: 0, kind: "end", plant: p, farm: f};
+      });
+    });
+    console.log("ensureNonNullGrid done...");
+  }
+
+  zeroGrid() {
+    this.ensureNonNullGrid();
+
     ALL_TOTAL.quantity = 0;
+    FARMS.forEach((ff, f) => {
+      FARM_TOTALS[f].quantity = 0;
+    });
+    PLANTS.forEach((pp, p) => {
+      PLANT_TOTALS[p].quantity = 0;
+    });
+    FARMS.forEach((ff, f) => {
+      PLANTS.forEach((pp, p) => {
+        GRID[f][p] = 0;
+        FARM_GRID[f][p].quantity = 0;
+        PLANT_GRID[p][f].quantity = 0;
+      });
+    });
+    console.log("zeroGrid done...");
+  }
+
+  computeGrid() {
+    this.zeroGrid();
 
     HARVEST_LOG.forEach(h => {      
-      if(h.day !== "2016-04-18") return;
-      
-      if (GRID[h.farm] == null) GRID[h.farm] = [];
-      if (GRID[h.farm][h.plant] == null) GRID[h.farm][h.plant] = 0;
-      GRID[h.farm][h.plant] += h.quantity;
-      ALL_TOTAL.quantity += h.quantity;
-
-      if (FARM_GRID[h.farm] == null) FARM_GRID[h.farm] = [];
-      if (FARM_GRID[h.farm][h.plant] == null) 
-          FARM_GRID[h.farm][h.plant] = {name: PLANTS[h.plant], quantity: 0, kind: "end", 
-              plant: h.plant, farm: h.farm};
-      FARM_GRID[h.farm][h.plant].quantity += h.quantity;
-
-      if (PLANT_GRID[h.plant] == null) PLANT_GRID[h.plant] = [];
-      if (PLANT_GRID[h.plant][h.farm] == null) 
-          PLANT_GRID[h.plant][h.farm] = {name: FARMS[h.farm], quantity: 0, kind: "end", 
-              plant: h.plant, farm: h.farm};
-      PLANT_GRID[h.plant][h.farm].quantity += h.quantity;
-
-      if (FARM_TOTALS[h.farm] == null) 
-          FARM_TOTALS[h.farm] = {name: FARMS[h.farm], quantity: 0};
-      FARM_TOTALS[h.farm].quantity += h.quantity;
-
-      if (PLANT_TOTALS[h.plant] == null) 
-          PLANT_TOTALS[h.plant] = {name: PLANTS[h.plant], quantity: 0};
-      PLANT_TOTALS[h.plant].quantity += h.quantity;
+      if(h.day !== date) return;
+      this.addQuantity(h.farm, h.plant, h.quantity);
     });
     
     console.log("computation complete..."); 
+  }
+
+  addQuantity(f:number, p:number, q: number) {
+    PLANT_TOTALS[p].quantity += q;
+    FARM_TOTALS[f].quantity += q;
+    ALL_TOTAL.quantity += q;
+    GRID[f][p] += q;
+    FARM_GRID[f][p].quantity += q;
+    PLANT_GRID[p][f].quantity += q;
   }
 
 //--------------------------------------------------------------------------------------
@@ -71,13 +108,7 @@ export class ThingsService {
   addHarvest(h: Harvest) {
     console.log(h);
     HARVEST_LOG.push(h);
-
-    PLANT_TOTALS[h.plant].quantity += h.quantity;
-    FARM_TOTALS[h.farm].quantity += h.quantity;
-    ALL_TOTAL.quantity += h.quantity;
-    GRID[h.farm][h.plant] += h.quantity;
-    FARM_GRID[h.farm][h.plant].quantity += h.quantity;
-    PLANT_GRID[h.plant][h.farm].quantity += h.quantity;
+    this.addQuantity(h.farm, h.plant, h.quantity);
   }
 
   getHarvest(farm: number, plant: number) {
@@ -132,6 +163,8 @@ export class ThingsService {
 }
 
 //--------------------------------------------------------------------------------------
+
+let date: string = "2016-04-20";
 
 let HARVEST_LOG: Harvest[];
 

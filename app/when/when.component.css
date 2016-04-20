@@ -1,0 +1,12 @@
+:hover { 
+  color: blue;
+  cursor: pointer;
+  cursor: hand;
+}
+
+span {
+  margin-top: 5px;
+  margin-left: 5px;
+  color: orangered;
+  font-size: 16px;
+}
