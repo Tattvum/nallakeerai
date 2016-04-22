@@ -11,42 +11,23 @@ declare var __moduleName: string;
   styleUrls: ['when.component.css'],
 })
 export class WhenComponent {
-  prev: Date;
-  now: Date;
-  next: Date;
 
-  move(date: Date, offset: number) {
-    date.setDate(date.getDate() + offset);
+  showDay() {//wow, a nice way to listen to variable changes - use gui
+    return this.service.getDayString();
   }
 
-  constructor(private service: ThingsService) {
-    this.now = new Date();
-    this.prev = new Date(); this.move(this.prev, -1);
-    this.next = new Date(); this.move(this.next, +1);   
-  }
-
-  moveAll(offset: number) {
-    this.move(this.prev, offset);
-    this.move(this.now, offset);
-    this.move(this.next, offset);
-  }
-
-  format(date: Date): string {
-    return date.toISOString().slice(0, 10);
-  }
+  constructor(private service: ThingsService) {}
 
   clickPrev(event) {
-    this.service.setDay(this.format(this.prev));
-    this.moveAll(-1);
+    this.service.moveDay(-1);
   }
 
   clickNow(event) {
-    this.service.setDay(this.format(this.now));
+    //this.day = this.service.getDayString();
   }
 
   clickNext(event) {
-    this.service.setDay(this.format(this.next));
-    this.moveAll(+1);
+    this.service.moveDay(+1);
   }
 
 }

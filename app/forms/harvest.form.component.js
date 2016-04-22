@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', '../things/things.service'], function(exports_1, context_1) {
+System.register(['angular2/core', '../things/things.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,48 +10,31 @@ System.register(['angular2/core', 'angular2/router', '../things/things.service']
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, things_service_1;
+    var core_1, things_service_1;
     var HarvestFormComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (router_1_1) {
-                router_1 = router_1_1;
-            },
             function (things_service_1_1) {
                 things_service_1 = things_service_1_1;
             }],
         execute: function() {
             HarvestFormComponent = (function () {
-                function HarvestFormComponent(service, routeParams) {
+                function HarvestFormComponent(service) {
                     this.service = service;
-                    this.routeParams = routeParams;
-                    this.harvest = { day: "---", farm: "---", plant: "---", quantity: 0 };
                     this.submitted = true;
-                    var parts = routeParams.get('path').split("/");
-                    var fid = 2;
-                    var pid = 3;
-                    if (parts[1] == 'Plants') {
-                        fid = 3;
-                        pid = 2;
-                    }
-                    this.harvest.farm = parts[fid];
-                    this.harvest.plant = parts[pid];
-                    this.harvest.quantity = 0;
-                    this.harvest.day = service.getDay();
+                    this.quantity = 0;
                 }
                 HarvestFormComponent.prototype.onSubmit = function () {
                     this.submitted = true;
-                    console.log(this.harvest);
-                    this.service.addHarvest({
-                        day: this.harvest.day,
-                        farm: +this.harvest.farm.split(":")[1] - 1,
-                        plant: +this.harvest.plant.split(":")[1] - 1,
-                        quantity: this.harvest.quantity,
-                    });
+                    this.service.harvest(this.quantity);
                 };
+                __decorate([
+                    core_1.Input(), 
+                    __metadata('design:type', Number)
+                ], HarvestFormComponent.prototype, "quantity", void 0);
                 HarvestFormComponent = __decorate([
                     core_1.Component({
                         moduleId: __moduleName,
@@ -59,7 +42,7 @@ System.register(['angular2/core', 'angular2/router', '../things/things.service']
                         templateUrl: 'harvest.form.component.html',
                         styleUrls: ['harvest.form.component.css'],
                     }), 
-                    __metadata('design:paramtypes', [things_service_1.ThingsService, router_1.RouteParams])
+                    __metadata('design:paramtypes', [things_service_1.ThingsService])
                 ], HarvestFormComponent);
                 return HarvestFormComponent;
             }());

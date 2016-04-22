@@ -28,32 +28,30 @@ declare var __moduleName: string;
   { path: '/farm/...', name: 'Farm', component: FarmComponent },
   { path: '/harvest', name: 'Harvest', component: HarvestFormComponent },
 ])
-export class ThingsComponent implements OnInit {
+export class ThingsComponent {
 
   @Input() things: any[];
   private path: string;
 
   constructor(private service: ThingsService, private router: Router, routeParams: RouteParams) {
     this.path = routeParams.get('path');
-    console.log(this.path);
-  }
-
-  ngOnInit() {
-    this.service.getThings(this.path).then(things => {
+    //console.log(this.path);
+    this.service.getThings().then(things => {
       this.things = things;
     });
   }
 
   click(thing) {
+    let newPath = this.path + "/" + thing.name;
+    this.service.navigate(newPath);
+
     this.things.forEach(th => th.isSpecial = false);
     thing.isSpecial = true;
-    let params = { path: this.path + "/" + thing.name };
+
+    let params = { path: newPath };
     if (thing.kind == "all") this.router.navigate(['All']);
-//    else if (thing.kind == "farm") this.router.navigate(['./Farm', params]);
-    else if (thing.kind == "end") {
-      console.log(this.service.getHarvest(thing.farm, thing.plant));
-      this.router.navigate(['./Harvest', {path: this.path + "/" + thing.name}]);  
-    } else this.router.navigate(['./Things', params]);
+    else if (thing.kind == "end") this.router.navigate(['./Harvest']);  
+    else this.router.navigate(['./Things', params]);
   }
 
 }

@@ -11,6 +11,15 @@ th, td {
   text-align: center;
 }
 
+/*
+td:hover {
+  background-color: lightyellow;
+  color: blue;
+  cursor: pointer;
+  cursor: hand;
+}
+*/
+
 th {
   font-size: 12px;
 }

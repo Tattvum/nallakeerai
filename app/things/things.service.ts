@@ -3,12 +3,17 @@ import {Injectable} from 'angular2/core';
 import { Thing }   from './thing';
 import { Harvest }   from './harvest';
 
+import { FirebaseService }   from './firebase.service';
+
+
 @Injectable()
 export class ThingsService {
   
 //--------------------------------------------------------------------------------------
 
-  constructor() {
+  constructor(private service: FirebaseService) {
+    this.setDate(new Date());
+
     HARVEST_LOG = [];
     let DAYS = ["2016-04-19", "2016-04-20", "2016-04-21"];
     DAYS.forEach((dd, d) => {
@@ -18,22 +23,33 @@ export class ThingsService {
           HARVEST_LOG.push({day: DAYS[d], farm: f, plant: p, quantity: quantity});
         })
       })
-    });
-    
-    console.log("generation complete..."); 
+    });  
+    //console.log("generation complete..."+(new Date().getTime())); 
+
     this.computeGrid();
-  }
+ }
 
 //--------------------------------------------------------------------------------------
 
-  getDay(): string {
-    return date;    
+  private setDate(d: Date) {
+    date = d;
+    day = this.getDayString();
+    console.log("SET: "+day);
   }
-  
-  setDay(dt: string) {
-    date = dt;
-    console.log(date);
+
+  getDayString(): string {
+    return date.toISOString().slice(0, 10);
+  }
+
+  moveDay(offset: number) {
+    date.setDate(date.getDate() + offset);
+    this.setDate(date);
     this.computeGrid();
+  }
+
+  getDate(): Date {
+    console.log("GET: "+date);
+    return date;    
   }
 
 //--------------------------------------------------------------------------------------
@@ -60,7 +76,7 @@ export class ThingsService {
             PLANT_GRID[p][f] = {name: FARMS[f], quantity: 0, kind: "end", plant: p, farm: f};
       });
     });
-    console.log("ensureNonNullGrid done...");
+    //console.log("ensureNonNullGrid done...");
   }
 
   zeroGrid() {
@@ -80,14 +96,14 @@ export class ThingsService {
         PLANT_GRID[p][f].quantity = 0;
       });
     });
-    console.log("zeroGrid done...");
+    //console.log("zeroGrid done...");
   }
 
   computeGrid() {
     this.zeroGrid();
 
     HARVEST_LOG.forEach(h => {      
-      if(h.day !== date) return;
+      if(h.day !== day) return;
       this.addQuantity(h.farm, h.plant, h.quantity);
     });
     
@@ -105,10 +121,46 @@ export class ThingsService {
 
 //--------------------------------------------------------------------------------------
 
-  addHarvest(h: Harvest) {
-    console.log(h);
-    HARVEST_LOG.push(h);
-    this.addQuantity(h.farm, h.plant, h.quantity);
+  private path: string = null; 
+  private state = {day: null, farm: null, plant: null, quantity: 0}; 
+
+  navigate(path: string) {
+    this.path = path;
+    if (path != null) {
+      let part = path.split("/");
+      if (part.length <= 2) {
+        this.state.plant = null;
+        this.state.farm = null;
+      } else if (part.length == 3) {
+        let p = part[2].split(":"); 
+        let n = +p[1]-1;
+        this.state.plant = null;
+        this.state.farm = null;
+        if (part[1] == "Farms") this.state.farm = n;
+        else if (part[1] == "Plants") this.state.plant = n; 
+      } else if (part.length == 4) {
+        let p = part[3].split(":"); 
+        let n = +p[1]-1;
+        if (part[1] == "Farms") this.state.plant = n;
+        else if (part[1] == "Plants") this.state.farm = n; 
+      }
+    }
+    console.log("NAV: "+path+" "+this.state.day+" "+this.state.farm+" "+this.state.plant);
+  }
+
+  getPath(): string {
+    return this.path;
+  }
+
+//--------------------------------------------------------------------------------------
+
+  harvest(q: number) {
+    console.log("HARVEST: "+q);
+    this.state.day = day;
+    this.state.quantity = q;
+    HARVEST_LOG.push(this.state);
+    this.addQuantity(this.state.farm, this.state.plant, q);
+    this.service.addHarvest(this.state);
   }
 
   getHarvest(farm: number, plant: number) {
@@ -130,10 +182,10 @@ export class ThingsService {
 
 //--------------------------------------------------------------------------------------
 
-  getThings(path: string) {
-    console.log(path);
+  getThings() {
+    //console.log("PATH: "+this.path);
     
-    if (path == null) {//summary list
+    if (this.path == null) {//summary list
       let things: any[] = [];
       things.push(ALL_TOTAL);  
       things.push({name: "Farms", quantity: FARMS.length});  
@@ -141,10 +193,10 @@ export class ThingsService {
       return Promise.resolve(things);
     }
     
-    let part = path.split("/");
+    let part = this.path.split("/");
     let promise = null;
 
-    console.log(part);
+    //console.log(part);
 
     if (part.length == 2) {
       if (part[1] == "Farms") promise = Promise.resolve(FARM_TOTALS);
@@ -164,7 +216,8 @@ export class ThingsService {
 
 //--------------------------------------------------------------------------------------
 
-let date: string = "2016-04-20";
+let date: Date = new Date();
+let day: string = "2016-04-20";
 
 let HARVEST_LOG: Harvest[];
 
