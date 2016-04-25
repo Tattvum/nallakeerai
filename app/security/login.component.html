@@ -1,14 +1,14 @@
 
 <div class="container">
-  <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+  <form (ngSubmit)="onSignIn()" #loginForm="ngForm">
 
     <div class="form-group">
       <label for="comment">Email</label>
-      <input type="text" class="form-control" [(ngModel)]="email">
+      <input type="text" required class="form-control" [(ngModel)]="email">
     </div>
     <div class="form-group">
       <label for="comment">Password</label>
-      <input type="password" class="form-control" autofocus [(ngModel)]="password">
+      <input type="password" required class="form-control" autofocus [(ngModel)]="password">
     </div>
 
     <button type="submit" class="btn btn-default" [disabled]="!loginForm.form.valid">Sign In</button>

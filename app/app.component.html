@@ -4,8 +4,9 @@
   <a [routerLink]="['./Farm', {path: 'null/Farms/Farm:3'}]">Farm</a>
 </nav>
 -->
-<div *ngIf="authenticated" >
+<div *ngIf="user!=null" >
   <when></when>
+  <span class="user">{{ user.email }}</span>
 </div>
 
 <router-outlet></router-outlet>

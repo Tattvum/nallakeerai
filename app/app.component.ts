@@ -6,10 +6,12 @@ import { ThingsComponent } from './things/things.component';
 import { FarmComponent } from './farm/farm.component';
 import { WhenComponent } from './when/when.component';
 import { BundleWiseComponent } from './bundle-wise/bundle-wise.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './security/login.component';
 
 import { ThingsService } from './things/things.service';
 import { FirebaseService } from './things/firebase.service';
+import { SecurityService } from './security/security.service';
+import { User } from './security/user';
 
 // Let TypeScript know about the special SystemJS __moduleName variable
 declare var __moduleName: string;
@@ -20,21 +22,26 @@ declare var __moduleName: string;
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.css'],
   directives: [ROUTER_DIRECTIVES, WhenComponent],
-  providers: [ThingsService, FirebaseService],
+  providers: [ThingsService, FirebaseService, SecurityService],
 })
 @RouteConfig([
-  {path: '/summary/...', name: 'Report', component: ThingsComponent},
-//  {path: '/farm/...', name: 'Farm', component: FarmComponent },
-  {path: '/login', name: 'Login', component: LoginComponent },
-//  { path: '/all', name: 'All', component: BundleWiseComponent},
+  { path: '/summary/...', name: 'Report', component: ThingsComponent },
+  //  {path: '/farm/...', name: 'Farm', component: FarmComponent },
+  { path: '/login', name: 'Login', component: LoginComponent },
+  //  { path: '/all', name: 'All', component: BundleWiseComponent},
 ])
 export class AppComponent implements OnInit {
-  authenticated: boolean = true;
-  
-  constructor(private router: Router){}
-  
+  user: User = null;
+
+  constructor(private router: Router, private service: SecurityService) {
+    service.authenticated$.subscribe(user => {
+      this.user = user;
+      console.log("app knows you now: "+user);
+    });
+  }
+
   ngOnInit() {
-    if(this.authenticated) this.router.navigate(['Report']);
+    if (this.user != null) this.router.navigate(['Report']);
     else this.router.navigate(['Login']);
   }
 }
