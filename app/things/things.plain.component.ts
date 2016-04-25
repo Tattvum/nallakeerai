@@ -33,7 +33,7 @@ export class ThingsPlainComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.service.getThings(this.path).then(things => {
+    this.service.getThings().then(things => {
       this.things = things;
     });
   }

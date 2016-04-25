@@ -4,6 +4,8 @@
   <a [routerLink]="['./Farm', {path: 'null/Farms/Farm:3'}]">Farm</a>
 </nav>
 -->
-<when></when>
+<div *ngIf="authenticated" >
+  <when></when>
+</div>
 
 <router-outlet></router-outlet>

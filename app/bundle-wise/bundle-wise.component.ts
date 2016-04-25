@@ -18,8 +18,8 @@ export class BundleWiseComponent {
   private all;
   private quantity: number = 13;
 
-  constructor(private _service: ThingsService) {
-    this._service.getAll().then(all => {
+  constructor(private service: ThingsService) {
+    this.service.getAll().then(all => {
       this.all = all;
     });   
   }
