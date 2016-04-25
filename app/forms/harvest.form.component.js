@@ -33,6 +33,10 @@ System.register(['angular2/core', '../data/data.service'], function(exports_1, c
                 };
                 __decorate([
                     core_1.Input(), 
+                    __metadata('design:type', Object)
+                ], HarvestFormComponent.prototype, "submitted", void 0);
+                __decorate([
+                    core_1.Input(), 
                     __metadata('design:type', Number)
                 ], HarvestFormComponent.prototype, "quantity", void 0);
                 HarvestFormComponent = __decorate([

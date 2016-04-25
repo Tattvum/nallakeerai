@@ -22,7 +22,7 @@ export class LoginComponent {
   
   onSignIn() {
     this.service.authenticate(this.email, this.password).then((auth) => {
-      this.router.navigate(["../Report"]);
+      this.router.navigate(["../Main"]);
     }).catch((error) => {
       console.log(error);
     });

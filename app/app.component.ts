@@ -5,7 +5,7 @@ import { HarvestFormComponent } from './forms/harvest.form.component';
 import { ThingsComponent } from './things/things.component';
 import { FarmComponent } from './farm/farm.component';
 import { WhenComponent } from './when/when.component';
-import { BundleWiseComponent } from './bundle-wise/bundle-wise.component';
+import { BundlesComponent } from './bundles/bundles.component';
 import { LoginComponent } from './security/login.component';
 
 import { DataService } from './data/data.service';
@@ -25,10 +25,10 @@ declare var __moduleName: string;
   providers: [DataService, FirebaseService, SecurityService],
 })
 @RouteConfig([
-  { path: '/summary/...', name: 'Report', component: ThingsComponent },
+//  { path: '/summary/...', name: 'Report', component: ThingsComponent },
   //  {path: '/farm/...', name: 'Farm', component: FarmComponent },
   { path: '/login', name: 'Login', component: LoginComponent },
-  //  { path: '/all', name: 'All', component: BundleWiseComponent},
+  { path: '/all', name: 'Main', component: BundlesComponent },
 ])
 export class AppComponent implements OnInit {
   user: User = null;
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.user != null) this.router.navigate(['Report']);
+    if (this.user != null) this.router.navigate(['Main']);
     else this.router.navigate(['Login']);
   }
 }

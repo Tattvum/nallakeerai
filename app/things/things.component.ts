@@ -5,7 +5,7 @@ import { Thing }   from '../data/thing';
 import { Harvest }   from '../data/harvest';
 import { DataService }   from '../data/data.service';
 import { ThingComponent } from './thing.component';
-import { BundleWiseComponent } from '../bundle-wise/bundle-wise.component';
+import { BundlesComponent } from '../bundles/bundles.component';
 import { FarmComponent } from '../farm/farm.component';
 import { HarvestFormComponent } from '../forms/harvest.form.component';
 
@@ -24,7 +24,7 @@ declare var __moduleName: string;
 @RouteConfig([
   { path: '/', name: 'Blank', component: BlankComponent, useAsDefault: true },
   { path: '/things/...', name: 'Things', component: ThingsComponent },   //wow! recursive routs!!
-  { path: '/all', name: 'All', component: BundleWiseComponent },
+  { path: '/all', name: 'All', component: BundlesComponent },
   { path: '/farm/...', name: 'Farm', component: FarmComponent },
   { path: '/harvest', name: 'Harvest', component: HarvestFormComponent },
 ])

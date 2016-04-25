@@ -11,17 +11,29 @@ th, td {
   text-align: center;
 }
 
-/*
 td:hover {
   background-color: lightyellow;
   color: blue;
   cursor: pointer;
   cursor: hand;
 }
-*/
 
 th {
   font-size: 12px;
+}
+
+.highlight {
+  background-color: lightgoldenrodyellow;
+}
+
+.selected {
+  background-color: yellow;
+  color: red;
+}
+
+.selected:hover {
+  background-color: yellow;
+  color: red;
 }
 
 .total {
@@ -31,4 +43,19 @@ th {
 .grand {
   font-size: 14px;
   color: red;
+}
+
+.container {
+  margin-top: 5px;
+  margin-left: 5px;
+  font-size: 14px;
+}
+
+.value {
+  color: red;
+  font-size: 20px;
+}
+
+form {
+  width: 20%;
 }

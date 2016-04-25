@@ -193,6 +193,17 @@ export class DataService {
 
   //--------------------------------------------------------------------------------------
 
+  harvestNew(farm: number, plant: number, q: number) {
+    console.log("NEW HARVEST: " + q);
+    this.state.day = day;
+    this.state.quantity = q;
+    this.state.farm = farm;
+    this.state.plant = plant;
+    HARVEST_LOG.push(this.state);
+    this.addQuantity(this.state.farm, this.state.plant, q);
+    this.service.addHarvest(this.state);
+  }
+  
   harvest(q: number) {
     console.log("HARVEST: " + q);
     this.state.day = day;

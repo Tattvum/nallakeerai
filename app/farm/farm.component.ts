@@ -3,7 +3,7 @@ import { Router, RouteParams, RouteConfig, ROUTER_DIRECTIVES } from 'angular2/ro
 
 import { ThingsPlainComponent } from '../things/things.plain.component';
 import { ThingsComponent } from '../things/things.component';
-import { BundleWiseComponent } from '../bundle-wise/bundle-wise.component';
+import { BundlesComponent } from '../bundles/bundles.component';
 
 // Let TypeScript know about the special SystemJS __moduleName variable
 declare var __moduleName: string;
@@ -20,7 +20,7 @@ declare var __moduleName: string;
 @RouteConfig([
   { path: '/', name: 'Blank', component: BlankComponent, useAsDefault: true },
   { path: '/plants', name: 'Plants', component: ThingsPlainComponent },
-  { path: '/beds', name: 'Beds', component: BundleWiseComponent },
+  { path: '/beds', name: 'Beds', component: BundlesComponent },
 //  { path: '/things/...', name: 'Things', component: ThingsComponent },
 ])
 export class FarmComponent {

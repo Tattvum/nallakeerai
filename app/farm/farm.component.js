@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', '../things/things.plain.component', '../bundle-wise/bundle-wise.component'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', '../things/things.plain.component', '../bundles/bundles.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', '../things/things.plain.com
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, things_plain_component_1, bundle_wise_component_1;
+    var core_1, router_1, things_plain_component_1, bundles_component_1;
     var BlankComponent, FarmComponent;
     return {
         setters:[
@@ -23,8 +23,8 @@ System.register(['angular2/core', 'angular2/router', '../things/things.plain.com
             function (things_plain_component_1_1) {
                 things_plain_component_1 = things_plain_component_1_1;
             },
-            function (bundle_wise_component_1_1) {
-                bundle_wise_component_1 = bundle_wise_component_1_1;
+            function (bundles_component_1_1) {
+                bundles_component_1 = bundles_component_1_1;
             }],
         execute: function() {
             BlankComponent = (function () {
@@ -68,7 +68,7 @@ System.register(['angular2/core', 'angular2/router', '../things/things.plain.com
                     router_1.RouteConfig([
                         { path: '/', name: 'Blank', component: BlankComponent, useAsDefault: true },
                         { path: '/plants', name: 'Plants', component: things_plain_component_1.ThingsPlainComponent },
-                        { path: '/beds', name: 'Beds', component: bundle_wise_component_1.BundleWiseComponent },
+                        { path: '/beds', name: 'Beds', component: bundles_component_1.BundlesComponent },
                     ]), 
                     __metadata('design:paramtypes', [router_1.Router, router_1.RouteParams])
                 ], FarmComponent);

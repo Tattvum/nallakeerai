@@ -1,4 +1,4 @@
-export class BundleWise {
+export class Bundles {
   constructor(
     public farms: string[],
     public varieties: string[],

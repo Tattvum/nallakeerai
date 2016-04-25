@@ -12,7 +12,7 @@ declare var __moduleName: string;
   styleUrls: ['harvest.form.component.css'],
 })
 export class HarvestFormComponent {
-  submitted = true;
+  @Input() submitted = true;
   @Input() quantity: number = 0;
 
   constructor(private service: DataService) {}
