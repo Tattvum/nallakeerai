@@ -1,6 +1,6 @@
 import { Component, Input } from 'angular2/core';
 import { NgForm }    from 'angular2/common';
-import { ThingsService }    from '../things/things.service';
+import { DataService }    from '../data/data.service';
 
 // Let TypeScript know about the special SystemJS __moduleName variable
 declare var __moduleName: string;
@@ -15,7 +15,7 @@ export class HarvestFormComponent {
   submitted = true;
   @Input() quantity: number = 0;
 
-  constructor(private service: ThingsService) {}
+  constructor(private service: DataService) {}
 
   onSubmit() {
     this.submitted = true;

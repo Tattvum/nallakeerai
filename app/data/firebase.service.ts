@@ -28,10 +28,6 @@ export class FirebaseService {
     }, function (errorObject) {
       console.log("The read failed: " + errorObject.code);
     });
-
-    this.authenticate("a@b.c", "xxxx")
-        .then(auth => {console.log("called: "+auth.uid)})
-        .catch(err => {console.log("error: "+err)});
 */
     console.log(url);
     return this.http.get(url).toPromise().then(res => res, this.handleError);

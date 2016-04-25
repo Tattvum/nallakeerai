@@ -1,9 +1,9 @@
 import { Component, Input, Output, OnInit, EventEmitter } from 'angular2/core';
 import {Router, RouteParams, RouteConfig, ROUTER_DIRECTIVES } from 'angular2/router';
 
-import { Thing }   from './thing';
-import { Harvest }   from './harvest';
-import { ThingsService }   from './things.service';
+import { Thing }   from '../data/thing';
+import { Harvest }   from '../data/harvest';
+import { DataService }   from '../data/data.service';
 import { ThingComponent } from './thing.component';
 import { BundleWiseComponent } from '../bundle-wise/bundle-wise.component';
 import { FarmComponent } from '../farm/farm.component';
@@ -33,7 +33,7 @@ export class ThingsComponent {
   @Input() things: any[];
   private path: string;
 
-  constructor(private service: ThingsService, private router: Router, routeParams: RouteParams) {
+  constructor(private service: DataService, private router: Router, routeParams: RouteParams) {
     this.path = routeParams.get('path');
     //console.log(this.path);
     this.service.getThings().then(things => {

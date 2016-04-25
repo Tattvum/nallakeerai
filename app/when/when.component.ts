@@ -1,5 +1,5 @@
 import { Component, Input, Output } from 'angular2/core';
-import { ThingsService }    from '../things/things.service';
+import { DataService }    from '../data/data.service';
 
 // Let TypeScript know about the special SystemJS __moduleName variable
 declare var __moduleName: string;
@@ -16,7 +16,7 @@ export class WhenComponent {
     return this.service.getDayString();
   }
 
-  constructor(private service: ThingsService) {}
+  constructor(private service: DataService) {}
 
   clickPrev(event) {
     this.service.moveDay(-1);

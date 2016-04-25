@@ -1,7 +1,7 @@
 import { Component, Input } from 'angular2/core';
 
-import { Thing }   from '../things/thing';
-import { ThingsService }   from '../things/things.service';
+import { Thing }   from '../data/thing';
+import { DataService }   from '../data/data.service';
 import { HarvestFormComponent }   from '../forms/harvest.form.component';
 
 // Let TypeScript know about the special SystemJS __moduleName variable
@@ -18,7 +18,7 @@ export class BundleWiseComponent {
   private all;
   private quantity: number = 13;
 
-  constructor(private service: ThingsService) {
+  constructor(private service: DataService) {
     this.service.getAll().then(all => {
       this.all = all;
     });   

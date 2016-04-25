@@ -1,8 +1,8 @@
 import { Component, Input, Output, OnInit, EventEmitter } from 'angular2/core';
 import {Router, RouteParams } from 'angular2/router';
 
-import { Thing }   from './thing';
-import { ThingsService }   from './things.service';
+import { Thing }   from '../data//thing';
+import { DataService }   from '../data/data.service';
 import { ThingComponent } from './thing.component';
 
 // Let TypeScript know about the special SystemJS __moduleName variable
@@ -20,7 +20,7 @@ export class ThingsPlainComponent implements OnInit {
   @Input() things: Thing[];
   private path: string;
   
-  constructor(private service: ThingsService, private router: Router, routeParams: RouteParams) {
+  constructor(private service: DataService, private router: Router, routeParams: RouteParams) {
     this.path = routeParams.get('path');
     console.log(this.path);
   }

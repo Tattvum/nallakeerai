@@ -22,7 +22,6 @@ export class LoginComponent {
   
   onSignIn() {
     this.service.authenticate(this.email, this.password).then((auth) => {
-      console.log("UID: "+auth.uid);
       this.router.navigate(["../Report"]);
     }).catch((error) => {
       console.log(error);

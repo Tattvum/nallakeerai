@@ -1,4 +1,4 @@
-System.register(['angular2/core', '../things/things.service'], function(exports_1, context_1) {
+System.register(['angular2/core', '../data/data.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,15 +10,15 @@ System.register(['angular2/core', '../things/things.service'], function(exports_
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, things_service_1;
+    var core_1, data_service_1;
     var HarvestFormComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (things_service_1_1) {
-                things_service_1 = things_service_1_1;
+            function (data_service_1_1) {
+                data_service_1 = data_service_1_1;
             }],
         execute: function() {
             HarvestFormComponent = (function () {
@@ -42,7 +42,7 @@ System.register(['angular2/core', '../things/things.service'], function(exports_
                         templateUrl: 'harvest.form.component.html',
                         styleUrls: ['harvest.form.component.css'],
                     }), 
-                    __metadata('design:paramtypes', [things_service_1.ThingsService])
+                    __metadata('design:paramtypes', [data_service_1.DataService])
                 ], HarvestFormComponent);
                 return HarvestFormComponent;
             }());

@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter } from 'angular2/core';
 
-import { Thing }   from './thing';
+import { Thing }   from '../data/thing';
 
 // Let TypeScript know about the special SystemJS __moduleName variable
 declare var __moduleName: string;

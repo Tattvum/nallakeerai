@@ -1,7 +1,7 @@
 import {Injectable} from 'angular2/core';
 import {Subject}    from 'rxjs/Subject';
 
-import { FirebaseService }     from '../things/firebase.service';
+import { FirebaseService }     from '../data/firebase.service';
 import { User }     from './user';
 
 @Injectable()

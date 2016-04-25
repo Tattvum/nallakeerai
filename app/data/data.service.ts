@@ -7,7 +7,7 @@ import { FirebaseService }   from './firebase.service';
 
 
 @Injectable()
-export class ThingsService {
+export class DataService {
 
   //--------------------------------------------------------------------------------------
 

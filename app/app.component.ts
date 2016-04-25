@@ -8,8 +8,8 @@ import { WhenComponent } from './when/when.component';
 import { BundleWiseComponent } from './bundle-wise/bundle-wise.component';
 import { LoginComponent } from './security/login.component';
 
-import { ThingsService } from './things/things.service';
-import { FirebaseService } from './things/firebase.service';
+import { DataService } from './data/data.service';
+import { FirebaseService } from './data/firebase.service';
 import { SecurityService } from './security/security.service';
 import { User } from './security/user';
 
@@ -22,7 +22,7 @@ declare var __moduleName: string;
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.css'],
   directives: [ROUTER_DIRECTIVES, WhenComponent],
-  providers: [ThingsService, FirebaseService, SecurityService],
+  providers: [DataService, FirebaseService, SecurityService],
 })
 @RouteConfig([
   { path: '/summary/...', name: 'Report', component: ThingsComponent },
@@ -34,10 +34,7 @@ export class AppComponent implements OnInit {
   user: User = null;
 
   constructor(private router: Router, private service: SecurityService) {
-    service.authenticated$.subscribe(user => {
-      this.user = user;
-      console.log("app knows you now: "+user);
-    });
+    service.authenticated$.subscribe( user => this.user = user );
   }
 
   ngOnInit() {
