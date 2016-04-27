@@ -15,7 +15,7 @@ declare var __moduleName: string;
 })
 export class LoginComponent {
   
-  email: string = "svramu@gmail.com";
+  email: string = "";
   password: string = "";
 
   constructor(private service: SecurityService, private router: Router) {}
