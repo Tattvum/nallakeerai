@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, NgZone } from 'angular2/core';
+import { Component, Input, ViewChild, ElementRef, NgZone, Renderer } from 'angular2/core';
 
 import { DataService }   from '../data/data.service';
 
@@ -20,7 +20,7 @@ export class BundlesComponent {
 
   @ViewChild('editor') editor: ElementRef;
 
-  constructor(private service: DataService, private ngZone: NgZone) {
+  constructor(private service: DataService, private ngZone: NgZone, private renderer: Renderer) {
     this.service.getAll().then(all => {
       this.all = all;
     });
@@ -41,8 +41,12 @@ export class BundlesComponent {
   }
 
   private focusEditor() {
+    //http://stackoverflow.com/questions/34502768/why-angular2-template-local-variables-are-not-usable-in-templates-when-using-ng
+    //http://angularjs.blogspot.in/2016/04/5-rookie-mistakes-to-avoid-with-angular.html
     this.ngZone.runOutsideAngular(() => {
-      setTimeout(() => this.editor.nativeElement.focus(), 0);
+      setTimeout(() => {
+        this.renderer.invokeElementMethod(this.editor.nativeElement, 'focus', []);
+      });
     });
   }
 

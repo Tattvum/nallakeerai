@@ -24,7 +24,7 @@ export class LoginComponent {
     this.service.authenticate(this.email, this.password).then((auth) => {
       this.router.navigate(["../Main"]);
     }).catch((error) => {
-      console.log(error);
+      alert(error);
     });
   }
 
