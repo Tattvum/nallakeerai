@@ -15,11 +15,11 @@ export class DataService {
     if (HARVEST_LOG != null && HARVEST_LOG.length > 0) return Promise.resolve();//Why create dummies again!
     console.log("creating harvest mocks...");
     let DAYS = ["2016-04-19", "2016-04-20", "2016-04-21"];
-    DAYS.forEach((dd, d) => {
-      FARMS.forEach((ff, f) => {
-        PLANTS.forEach((pp, p) => {
+    DAYS.forEach((d) => {
+      FARMS.forEach((f) => {
+        PLANTS.forEach((p) => {
           let quantity = Math.floor((Math.random() * 50) + 0);
-          HARVEST_LOG.push({ day: DAYS[d], farm: f, plant: p, quantity: quantity });
+          HARVEST_LOG.push({ day: d, farm: f.code, plant: p.code, quantity: quantity });
         })
       })
     });
@@ -33,7 +33,7 @@ export class DataService {
     while (i--) {// looping in reverse to avoid index change after deleting
       if (HARVEST_LOG[i].day == day) HARVEST_LOG.splice(i, 1);
     }
-    console.log((len-HARVEST_LOG.length)+" entries removed for day "+day);
+    console.log((len - HARVEST_LOG.length) + " entries removed for day " + day);
   }
 
   private setupRealHarvestLog(day: string): Promise<void> {
@@ -52,17 +52,36 @@ export class DataService {
   }
 
   private setupHarvestLog(day: string): Promise<void> {
-    return this.setupRealHarvestLog(day); 
+    return this.setupRealHarvestLog(day);
     //return this.setupMockHarvestLog(day);
   }
 
   constructor(private service: FirebaseService) {
     this.setDate(new Date());
     let self = this;
-    this.setupHarvestLog(day).then(() => {
-      this.computeGrid();
-      console.log("setup done.");
+
+    FARMS = [];
+    PLANTS = [];
+
+    this.service.getFarms().then(res => {
+      if (res != null) {
+        let obj = res.json();
+        for (var key in obj) FARMS.push(obj[key]);
+      }
+    }).then(() => {
+      this.service.getPlants().then(res => {
+        if (res != null) {
+          let obj = res.json();
+          for (var key in obj) PLANTS.push(obj[key]);
+        }
+      }).then(() => {
+        this.setupHarvestLog(day).then(() => {
+          this.computeGrid();
+          console.log("setup done.");
+        });
+      });
     });
+
   }
 
   //--------------------------------------------------------------------------------------
@@ -94,27 +113,19 @@ export class DataService {
   //--------------------------------------------------------------------------------------
 
   ensureNonNullGrid() {
-    if (ALL_TOTAL == null) ALL_TOTAL = { name: "Bundles", quantity: 0, kind: "all" };
-    FARMS.forEach((ff, f) => {
-      if (FARM_TOTALS[f] == null) FARM_TOTALS[f] = { name: ff, quantity: 0 };
+    if (ALL_TOTAL == null) ALL_TOTAL = {quantity: 0};
+    FARMS.forEach((f) => {
+      if (FARM_TOTALS[f.code] == null) FARM_TOTALS[f.code] = 0;
     });
-    PLANTS.forEach((pp, p) => {
-      if (PLANT_TOTALS[p] == null) PLANT_TOTALS[p] = { name: pp, quantity: 0 };
+    PLANTS.forEach((p) => {
+      if (PLANT_TOTALS[p.code] == null) PLANT_TOTALS[p.code] = 0;
     });
-    FARMS.forEach((ff, f) => {
-      PLANTS.forEach((pp, p) => {
-        if (GRID[f] == null) GRID[f] = [];
-        if (GRID[f][p] == null) GRID[f][p] = 0;
-
-        if (FARM_GRID[f] == null) FARM_GRID[f] = [];
-        if (FARM_GRID[f][p] == null)
-          FARM_GRID[f][p] = { name: PLANTS[p], quantity: 0, kind: "end", plant: p, farm: f };
-
-        if (PLANT_GRID[p] == null) PLANT_GRID[p] = [];
-        if (PLANT_GRID[p][f] == null)
-          PLANT_GRID[p][f] = { name: FARMS[f], quantity: 0, kind: "end", plant: p, farm: f };
+    FARMS.forEach((f) => {
+      PLANTS.forEach((p) => {
+        if (BUNDLES[f.code] == null) BUNDLES[f.code] = {};
+        if (BUNDLES[f.code][p.code] == null) BUNDLES[f.code][p.code] = 0;
       });
-    });
+    });    
     //console.log("ensureNonNullGrid done...");
   }
 
@@ -122,19 +133,9 @@ export class DataService {
     this.ensureNonNullGrid();
 
     ALL_TOTAL.quantity = 0;
-    FARMS.forEach((ff, f) => {
-      FARM_TOTALS[f].quantity = 0;
-    });
-    PLANTS.forEach((pp, p) => {
-      PLANT_TOTALS[p].quantity = 0;
-    });
-    FARMS.forEach((ff, f) => {
-      PLANTS.forEach((pp, p) => {
-        GRID[f][p] = 0;
-        FARM_GRID[f][p].quantity = 0;
-        PLANT_GRID[p][f].quantity = 0;
-      });
-    });
+    FARMS.forEach( (f) => FARM_TOTALS[f.code] = 0 );
+    PLANTS.forEach( (p) => PLANT_TOTALS[p.code] = 0 );
+    FARMS.forEach( (f) => PLANTS.forEach( (p) => BUNDLES[f.code][p.code] = 0 ));
     //console.log("zeroGrid done...");
   }
 
@@ -146,75 +147,41 @@ export class DataService {
       this.addQuantity(h.farm, h.plant, h.quantity);
     });
 
+    //console.log(BUNDLES);
     console.log("computation complete...");
   }
 
-  addQuantity(f: number, p: number, q: number) {
-    PLANT_TOTALS[p].quantity += q;
-    FARM_TOTALS[f].quantity += q;
+  addQuantity(f: string, p: string, q: number) {
+    PLANT_TOTALS[p] += q;
+    FARM_TOTALS[f] += q;
     ALL_TOTAL.quantity += q;
-    GRID[f][p] += q;
-    FARM_GRID[f][p].quantity += q;
-    PLANT_GRID[p][f].quantity += q;
+    BUNDLES[f][p] += q;
   }
 
   //--------------------------------------------------------------------------------------
 
-  private path: string = null;
-  private state = { day: null, farm: null, plant: null, quantity: 0 };
-
-  navigate(path: string) {
-    this.path = path;
-    if (path != null) {
-      let part = path.split("/");
-      if (part.length <= 2) {
-        this.state.plant = null;
-        this.state.farm = null;
-      } else if (part.length == 3) {
-        let p = part[2].split(":");
-        let n = +p[1] - 1;
-        this.state.plant = null;
-        this.state.farm = null;
-        if (part[1] == "Farms") this.state.farm = n;
-        else if (part[1] == "Plants") this.state.plant = n;
-      } else if (part.length == 4) {
-        let p = part[3].split(":");
-        let n = +p[1] - 1;
-        if (part[1] == "Farms") this.state.plant = n;
-        else if (part[1] == "Plants") this.state.farm = n;
-      }
-    }
-    console.log("NAV: " + path + " " + this.state.day + " " + this.state.farm + " " + this.state.plant);
-  }
-
-  getPath(): string {
-    return this.path;
-  }
-
-  //--------------------------------------------------------------------------------------
-
-  harvestNew(farm: number, plant: number, q: number) {
+  harvest(f: string, p: string, q: number) {
     console.log("NEW HARVEST: " + q);
-    this.state.day = day;
-    this.state.quantity = q;
-    this.state.farm = farm;
-    this.state.plant = plant;
-    HARVEST_LOG.push(this.state);
-    this.addQuantity(this.state.farm, this.state.plant, q);
-    this.service.addHarvest(this.state);
-  }
-  
-  harvest(q: number) {
-    console.log("HARVEST: " + q);
-    this.state.day = day;
-    this.state.quantity = q;
-    HARVEST_LOG.push(this.state);
-    this.addQuantity(this.state.farm, this.state.plant, q);
-    this.service.addHarvest(this.state);
+    let harvest = { day: day, farm: f, plant: p, quantity: q };
+    HARVEST_LOG.push(harvest);
+    this.addQuantity(f, p, q);
+    this.service.addHarvest(harvest);
   }
 
-  getHarvest(farm: number, plant: number) {
-    return GRID[farm][plant];
+  addFarm(code: string) {
+    let farm = {code: code};
+    console.log("ADD FARM: " + code);
+    FARMS.push(farm);
+    this.computeGrid();
+    this.service.addFarm(farm);
+}
+
+  addPlant(code: string) {
+    let plant = {code: code};
+    console.log("ADD PLANT: " + code);
+    PLANTS.push(plant);
+    this.computeGrid();
+    this.service.addPlant(plant);
   }
 
   //--------------------------------------------------------------------------------------
@@ -223,64 +190,28 @@ export class DataService {
     return Promise.resolve({
       farms: FARMS,
       plants: PLANTS,
-      bundles: GRID,
+      bundles: BUNDLES,
       farmTotals: FARM_TOTALS,
       plantTotals: PLANT_TOTALS,
-      grandTotal: ALL_TOTAL,
+      allTotal: ALL_TOTAL,
     });
   }
 
   //--------------------------------------------------------------------------------------
 
-  getThings(): Promise<any[]> {
-    //console.log("PATH: "+this.path);
-
-    if (this.path == null) {//summary list
-      let things: any[] = [];
-      things.push(ALL_TOTAL);
-      things.push({ name: "Farms", quantity: FARMS.length });
-      things.push({ name: "Plants", quantity: PLANTS.length });
-      return Promise.resolve(things);
-    }
-
-    let part = this.path.split("/");
-    let promise = null;
-
-    //console.log(part);
-
-    if (part.length == 2) {
-      if (part[1] == "Farms") promise = Promise.resolve(FARM_TOTALS);
-      else if (part[1] == "Plants") promise = Promise.resolve(PLANT_TOTALS);
-    } else if (part.length == 3) {
-      let p = part[2].split(":");
-      let n = +p[1];
-      if (p[0] == "Farm") promise = Promise.resolve(FARM_GRID[n - 1]);
-      else if (p[0] == "Keerai") promise = Promise.resolve(PLANT_GRID[n - 1]);
-    }
-
-    if (promise === null) console.log("SPMETHING WRONG! The promise is null, beware!");
-    return promise;
-  }
-
 }
-
-//--------------------------------------------------------------------------------------
 
 let date: Date = new Date();
 let day: string = "2016-04-20";
 
 let HARVEST_LOG: Harvest[] = [];
 
-let GRID: number[][] = [];
-let FARM_GRID = [];
-let PLANT_GRID = [];
-let FARM_TOTALS: Thing[] = [];
-let PLANT_TOTALS: Thing[] = [];
-let ALL_TOTAL: Thing = { name: "Bundles", quantity: 0, kind: "all" };
+let BUNDLES: { [index: string]: { [index: string]: number } } = {};
 
-let FARMS = ["Farm:1", "Farm:2", "Farm:3", "Farm:4", "Farm:5", "Farm:6", "Farm:7"];
-let PLANTS = [
-  "Keerai:1", "Keerai:2", "Keerai:3", "Keerai:4", "Keerai:5",
-  "Keerai:6", "Keerai:7", "Keerai:8", "Keerai:9", "Keerai:10",
-  "Keerai:11", "Keerai:12", "Keerai:13", "Keerai:14", "Keerai:15"];
+let FARM_TOTALS: { [index: string]: number } = {};
+let PLANT_TOTALS: { [index: string]: number } = {};
+let ALL_TOTAL: { quantity: number } = { quantity: 0 };
+
+let FARMS: { code: string }[] = [];
+let PLANTS: { code: string }[] = [];
 

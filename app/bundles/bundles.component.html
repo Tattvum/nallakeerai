@@ -1,40 +1,47 @@
-<table class="box">
-  <tr>
-    <th></th>
-    <th *ngFor="#plant of all.plants">
-      {{plant}}
-    </th>
-    <th></th>
-  </tr>
+<div *ngIf="all != null && all.bundles != null">
+  <table class="box">
+    <tr>
+      <th></th>
+      <th *ngFor="#plant of all.plants">
+        {{plant.code}}
+      </th>
+      <th (click)="addPlant()">+</th>
+    </tr>
 
-  <tr *ngFor="#row of all.bundles; #f = index">
-    <th>
-      {{all.farms[f]}}
-    </th>
-    <td *ngFor="#cell of row; #p = index" (click)="editHarvest(f, p, harvestForm)" [ngClass]="{selected: isSelected(f,p), highlight: isHighlighted(f,p)}">
-      {{cell}}
-    </td>
-    <th class="total">
-      {{all.farmTotals[f].quantity}}
-    </th>
-  </tr>
+    <tr *ngFor="#farm of all.farms">
+      <th>
+        {{farm.code}}
+      </th>
+      <td *ngFor="#plant of all.plants" 
+              (click)="editHarvest(farm.code, plant.code)" 
+              [ngClass]="{
+                selected: isSelected(farm.code, plant.code), 
+                highlight: isHighlighted(farm.code, plant.code)
+              }">
+        {{ bundle(farm.code, plant.code) }}
+      </td>
+      <th class="total">
+        {{all.farmTotals[farm.code]}}
+      </th>
+    </tr>
 
-  <tr>
-    <th></th>
-    <th class="total" *ngFor="#plantTotal of all.plantTotals">
-      {{plantTotal.quantity}}
-    </th>
-    <th class="total grand">
-      {{all.grandTotal.quantity}}
-    </th>
-  </tr>
-</table>
+    <tr>
+      <th (click)="addFarm()">+</th>
+      <th class="total" *ngFor="#plant of all.plants">
+        {{all.plantTotals[plant.code]}}
+      </th>
+      <th class="total grand">
+        {{all.allTotal.quantity}}
+      </th>
+    </tr>
+  </table>
+</div>
 
-<div class="container">
+<div class="container" *ngIf="showEditor">
   <form (ngSubmit)="onSubmit()" #harvestForm="ngForm">
 
     <div class="form-group">
-      <label for="comment">Bundles y</label>
+      <label for="comment">Bundles</label>
       <input type="number" #editor class="form-control" autofocus [(ngModel)]="quantity">
     </div>
 

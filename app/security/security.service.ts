@@ -18,7 +18,7 @@ export class SecurityService {
     let p = this.service.authenticate(email, password);
     p.then((auth) => {
       this.user = new User(auth.uid, email, auth.token);
-      console.log(this.user);
+      //console.log(this.user);
       this.authenticated.next(this.user);
     });
     return p;

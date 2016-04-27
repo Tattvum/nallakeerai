@@ -8,20 +8,49 @@ import { Harvest }     from './harvest';
 export class FirebaseService {
   constructor(private http: Http) { }
 
-  private _url = 'https://nallakeerai-nsp.firebaseio.com/harvest';
+  private _url = 'https://nallakeerai-nsp.firebaseio.com';
   private fbRoot = new Firebase(this._url);
+
+  getFarms(): Promise<any> {
+    let url = this._url + "/farms" + ".json";
+    console.log(url);
+    return this.http.get(url).toPromise().then(res => res, this.handleError);
+  }
+
+  getPlants() {
+    let url = this._url + "/plants" + ".json";
+    console.log(url);
+    return this.http.get(url).toPromise().then(res => res, this.handleError);
+  }
 
   addHarvest(harvest: any) {
     harvest.when = { '.sv': 'timestamp' };
-    let url = this._url + "/" + harvest.day + ".json";
+    let url = this._url + "/harvest/" + harvest.day + ".json";
     console.log(url);
     return this.http.post(url, JSON.stringify(harvest)).toPromise()
       .then(res => console.log(res.json()), this.handleError);
   }
 
+  addFarm(farm: any) {
+    farm.when = { '.sv': 'timestamp' };
+    let url = this._url + "/farms" + ".json";
+    console.log(url);
+    return this.http.post(url, JSON.stringify(farm)).toPromise()
+      .then(res => console.log(res.json()), this.handleError);
+  }
+
+  addPlant(plant: any) {
+    plant.when = { '.sv': 'timestamp' };
+    let url = this._url + "/plants" + ".json";
+    console.log(url);
+    return this.http.post(url, JSON.stringify(plant)).toPromise()
+      .then(res => console.log(res.json()), this.handleError);
+  }
+
   getFirebaseHarvestLog(day: string) {
-    let url = this._url + "/" + day + ".json";
+    let url = this._url + "/harvest/" + day + ".json";
 /*
+    //auto push socket works!!
     var fb = new Firebase(this._url + "/" + day);
     fb.on("value", function (snapshot) {
       console.log(snapshot.val());

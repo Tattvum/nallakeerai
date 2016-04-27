@@ -1,7 +1,7 @@
 export interface Harvest {
   day: string;
-  farm: number; 
-  plant: number; 
+  farm: string; 
+  plant: string; 
   quantity: number;
 }
 
