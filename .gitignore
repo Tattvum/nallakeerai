@@ -3,4 +3,4 @@ typings/
 app/**/*.js.map
 app/**/*.js
 npm-debug.log
-
+firebase-debug.log
