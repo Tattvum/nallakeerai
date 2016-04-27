@@ -10,6 +10,7 @@ export class FirebaseService {
 
   private _url = 'https://nallakeerai-nsp.firebaseio.com';
   private fbRoot = new Firebase(this._url);
+  private auth: any;
 
   getFarms(): Promise<any> {
     let url = this._url + "/farms" + ".json";
@@ -24,7 +25,9 @@ export class FirebaseService {
   }
 
   addHarvest(harvest: any) {
+    console.log(this.auth.password.email);
     harvest.when = { '.sv': 'timestamp' };
+    harvest.who = this.auth.password.email;
     let url = this._url + "/harvest/" + harvest.day + ".json";
     console.log(url);
     return this.http.post(url, JSON.stringify(harvest)).toPromise()
@@ -33,6 +36,7 @@ export class FirebaseService {
 
   addFarm(farm: any) {
     farm.when = { '.sv': 'timestamp' };
+    farm.who = this.auth.password.email;
     let url = this._url + "/farms" + ".json";
     console.log(url);
     return this.http.post(url, JSON.stringify(farm)).toPromise()
@@ -41,6 +45,7 @@ export class FirebaseService {
 
   addPlant(plant: any) {
     plant.when = { '.sv': 'timestamp' };
+    plant.who = this.auth.password.email;
     let url = this._url + "/plants" + ".json";
     console.log(url);
     return this.http.post(url, JSON.stringify(plant)).toPromise()
@@ -63,6 +68,7 @@ export class FirebaseService {
   }
 
   authenticate(email: string, password: string): Promise<any> {
+    let self = this;
     let fbr = this.fbRoot;
     return new Promise(function(resolve, reject) {
       fbr.authWithPassword({
@@ -73,6 +79,8 @@ export class FirebaseService {
           console.log("Login Failed!", error);
           reject(error);
         } else {
+          self.auth = authData;
+          console.log(self.auth.password.email);
           resolve(authData);
         }
       });
