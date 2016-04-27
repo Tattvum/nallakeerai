@@ -25,7 +25,6 @@ export class FirebaseService {
   }
 
   addHarvest(harvest: any) {
-    console.log(this.auth.password.email);
     harvest.when = { '.sv': 'timestamp' };
     harvest.who = this.auth.password.email;
     let url = this._url + "/harvest/" + harvest.day + ".json";

@@ -41,7 +41,7 @@
   <form (ngSubmit)="onSubmit()" #harvestForm="ngForm">
 
     <div class="form-group">
-      <label for="comment">Bundles</label>
+      <label for="comment">Add Bundles <i><small>(-ve for remove)</small></i></label>
       <input type="number" #editor class="form-control" autofocus [(ngModel)]="quantity">
     </div>
 

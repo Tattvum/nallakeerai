@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef } from 'angular2/core';
+import { Component, Input, ViewChild, ElementRef, NgZone } from 'angular2/core';
 
 import { DataService }   from '../data/data.service';
 
@@ -20,14 +20,14 @@ export class BundlesComponent {
 
   @ViewChild('editor') editor: ElementRef;
 
-  constructor(private service: DataService) {
+  constructor(private service: DataService, private ngZone: NgZone) {
     this.service.getAll().then(all => {
       this.all = all;
     });
   }
 
   bundle(farm: string, plant: string) {
-    if(this.all.bundles != null && this.all.bundles[farm] != null && this.all.bundles[farm][plant] != null)
+    if (this.all.bundles != null && this.all.bundles[farm] != null && this.all.bundles[farm][plant] != null)
       return this.all.bundles[farm][plant];
     else return "";
   }
@@ -40,12 +40,18 @@ export class BundlesComponent {
     return this.farm == farm || this.plant == plant;
   }
 
+  private focusEditor() {
+    this.ngZone.runOutsideAngular(() => {
+      setTimeout(() => this.editor.nativeElement.focus(), 0);
+    });
+  }
+
   editHarvest(farm: string, plant: string) {
     this.showEditor = true;
     this.farm = farm;
     this.plant = plant;
-    this.quantity = this.all.bundles[farm][plant];
-    //this.editor.nativeElement.focus();
+    this.quantity = 0;
+    this.focusEditor();
   }
 
   onSubmit() {
@@ -55,11 +61,11 @@ export class BundlesComponent {
 
   addFarm() {
     let code = prompt("Farm Code:");
-    if(code != null) this.service.addFarm(code);
+    if (code != null) this.service.addFarm(code);
   }
 
   addPlant() {
     let code = prompt("Plant Code:");
-    if(code != null) this.service.addPlant(code);
+    if (code != null) this.service.addPlant(code);
   }
 }
