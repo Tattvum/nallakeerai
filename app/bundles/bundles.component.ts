@@ -55,11 +55,11 @@ export class BundlesComponent {
 
   addFarm() {
     let code = prompt("Farm Code:");
-    this.service.addFarm(code);
+    if(code != null) this.service.addFarm(code);
   }
 
   addPlant() {
     let code = prompt("Plant Code:");
-    this.service.addPlant(code);
+    if(code != null) this.service.addPlant(code);
   }
 }
