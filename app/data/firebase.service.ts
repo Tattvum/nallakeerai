@@ -8,7 +8,12 @@ import { Harvest }     from './harvest';
 export class FirebaseService {
   constructor(private http: Http) { }
 
+/*  
+  //IMPORTANT TBD 1/2 - uncomment and use this in production deployment
   private _url = 'https://nallakeerai-nsp.firebaseio.com';
+*/
+  private _url = 'https://nallakeerai-nsp.firebaseio.com/testroot';
+  
   private fbRoot = new Firebase(this._url);
   private auth: any;
 

@@ -1,8 +1,6 @@
 import { Component, OnInit } from 'angular2/core';
 import { RouteConfig, Router, ROUTER_DIRECTIVES } from 'angular2/router';
 
-import { HarvestFormComponent } from './forms/harvest.form.component';
-import { FarmComponent } from './farm/farm.component';
 import { WhenComponent } from './when/when.component';
 import { BundlesComponent } from './bundles/bundles.component';
 import { LoginComponent } from './security/login.component';
