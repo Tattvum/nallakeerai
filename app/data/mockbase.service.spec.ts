@@ -18,7 +18,6 @@ function objToArray(result: Promise<any>): Promise<any[]> {
       for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
           fa.push(obj[key]);
-          console.log(obj[key]);
         }
       }
       return Promise.resolve(fa);
