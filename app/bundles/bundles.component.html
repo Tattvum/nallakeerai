@@ -2,17 +2,17 @@
   <table class="box">
     <tr>
       <th></th>
-      <th *ngFor="#plant of all.plants">
+      <th *ngFor="let plant of all.plants">
         {{plant.code}}
       </th>
       <th (click)="addPlant()">+</th>
     </tr>
 
-    <tr *ngFor="#farm of all.farms">
+    <tr *ngFor="let farm of all.farms">
       <th>
         {{farm.code}}
       </th>
-      <td *ngFor="#plant of all.plants" 
+      <td *ngFor="let plant of all.plants" 
               (click)="editHarvest(farm.code, plant.code)" 
               [ngClass]="{
                 selected: isSelected(farm.code, plant.code), 
@@ -27,7 +27,7 @@
 
     <tr>
       <th (click)="addFarm()">+</th>
-      <th class="total" *ngFor="#plant of all.plants">
+      <th class="total" *ngFor="let plant of all.plants">
         {{all.plantTotals[plant.code]}}
       </th>
       <th class="total grand">
