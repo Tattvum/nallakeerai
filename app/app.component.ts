@@ -7,6 +7,7 @@ import { LoginComponent } from './security/login.component';
 
 import { DataService } from './data/data.service';
 import { FirebaseService } from './data/firebase.service';
+import { MockbaseService } from './data/mockbase.service';
 import { SecurityService } from './security/security.service';
 import { User } from './security/user';
 
@@ -19,14 +20,16 @@ declare var __moduleName: string;
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.css'],
   directives: [ROUTER_DIRECTIVES, WhenComponent],
-  providers: [DataService, FirebaseService, SecurityService],
+  providers: [DataService, FirebaseService,, MockbaseService, SecurityService],
 })
 @RouteConfig([
   { path: '/login', name: 'Login', component: LoginComponent },
   { path: '/all', name: 'Main', component: BundlesComponent },
 ])
 export class AppComponent implements OnInit {
-  user: User = null;
+  //IMPORTANT TBD 3A/4 - uncomment and use this in production deployment
+  //  user: User = null;
+  user: User = {uid: "", email: "testing...", token:""};
 
   constructor(private router: Router, private service: SecurityService) {
     service.authenticated$.subscribe( user => this.user = user );

@@ -4,6 +4,7 @@ import { Thing }   from './thing';
 import { Harvest }   from './harvest';
 
 import { FirebaseService }   from './firebase.service';
+import { MockbaseService }   from './mockbase.service';
 
 
 @Injectable()
@@ -11,69 +12,32 @@ export class DataService {
 
   //--------------------------------------------------------------------------------------
 
-  private setupMockHarvestLog(day: string): Promise<void> {
-    if (HARVEST_LOG != null && HARVEST_LOG.length > 0) return Promise.resolve();//Why create dummies again!
-    console.log("creating harvest mocks...");
-    let DAYS = ["2016-04-19", "2016-04-20", "2016-04-21"];
-    DAYS.forEach((d) => {
-      FARMS.forEach((f) => {
-        PLANTS.forEach((p) => {
-          let quantity = Math.floor((Math.random() * 50) + 0);
-          HARVEST_LOG.push({ day: d, farm: f.code, plant: p.code, quantity: quantity });
-        })
-      })
-    });
-    console.log("generation complete..." + HARVEST_LOG.length);
-    return Promise.resolve();
-  }
-
-  private deleteHarvestLogEntries(day: string) {
-    let i = HARVEST_LOG.length;
-    let len = i;
-    while (i--) {// looping in reverse to avoid index change after deleting
-      if (HARVEST_LOG[i].day == day) HARVEST_LOG.splice(i, 1);
-    }
-    console.log((len - HARVEST_LOG.length) + " entries removed for day " + day);
-  }
-
-  private setupRealHarvestLog(day: string): Promise<void> {
+  private setupHarvestLog(day: string): Promise<void> {
     HARVEST_LOG = [];//DELETE ALL AND FETCH ALL FRESH !! - for now
-    return this.service.getFirebaseHarvestLog(day).then(res => {
-      if (res != null) {
-        let obj = res.json();
-        for (var p in obj) {
-          if (obj.hasOwnProperty(p)) {
-            HARVEST_LOG.push(obj[p]);
-          }
+    return this.service.getHarvestLog(day).then(obj => {
+      for (var p in obj) {
+        if (obj.hasOwnProperty(p)) {
+          HARVEST_LOG.push(obj[p]);
         }
       }
-      console.log("firebase fetch complete..." + HARVEST_LOG.length);
+      console.log("fetch complete..." + HARVEST_LOG.length);
     });
   }
 
-  private setupHarvestLog(day: string): Promise<void> {
-    return this.setupRealHarvestLog(day);
-    //return this.setupMockHarvestLog(day);
-  }
-
-  constructor(private service: FirebaseService) {
+// IMPORTANT TBD 4/4 - - uncomment and use this in production deployment
+//  constructor(private service: FirebaseService) {
+  constructor(private service: MockbaseService) {
     this.setDate(new Date());
     let self = this;
 
     FARMS = [];
     PLANTS = [];
 
-    this.service.getFarms().then(res => {
-      if (res != null) {
-        let obj = res.json();
+    this.service.getFarms().then(obj => {
         for (var key in obj) FARMS.push(obj[key]);
-      }
     }).then(() => {
-      this.service.getPlants().then(res => {
-        if (res != null) {
-          let obj = res.json();
+      this.service.getPlants().then(obj => {
           for (var key in obj) PLANTS.push(obj[key]);
-        }
       }).then(() => {
         this.setupHarvestLog(day).then(() => {
           this.computeGrid();

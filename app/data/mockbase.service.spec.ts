@@ -27,8 +27,6 @@ function objToArray(result: Promise<any>): Promise<any[]> {
   
 describe('Mockbase', () => {
   
-  let service: MockbaseService;
-  
   beforeEachProviders( () => [ MockbaseService ] );
   
   it('default farms list has 2 items', inject([MockbaseService], (service: MockbaseService) => {

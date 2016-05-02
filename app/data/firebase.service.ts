@@ -6,70 +6,45 @@ import { Harvest }     from './harvest';
 
 @Injectable()
 export class FirebaseService {
-  constructor(private http: Http) { }
-
 /*  
-  //IMPORTANT TBD 1/2 - uncomment and use this in production deployment
+  //IMPORTANT TBD 1/4 - uncomment and use this in production deployment
   private _url = 'https://nallakeerai-nsp.firebaseio.com';
 */
   private _url = 'https://nallakeerai-nsp.firebaseio.com/testroot';
+  private fbRoot = null;
   
-  private fbRoot = new Firebase(this._url);
+  constructor(private http: Http) {
+    this.fbRoot = new Firebase(this._url);
+  }
+
+/*  
+  //IMPORTANT TBD 3B/4 - uncomment and use this in production deployment
   private auth: any;
-
-  getFarms(): Promise<any> {
-    let url = this._url + "/farms" + ".json";
-    console.log(url);
-    return this.http.get(url).toPromise().then(res => res, this.handleError);
-  }
-
-  getPlants() {
-    let url = this._url + "/plants" + ".json";
-    console.log(url);
-    return this.http.get(url).toPromise().then(res => res, this.handleError);
-  }
-
-  addHarvest(harvest: any) {
-    harvest.when = { '.sv': 'timestamp' };
-    harvest.who = this.auth.password.email;
-    let url = this._url + "/harvest/" + harvest.day + ".json";
-    console.log(url);
-    return this.http.post(url, JSON.stringify(harvest)).toPromise()
-      .then(res => console.log(res.json()), this.handleError);
-  }
-
-  addFarm(farm: any) {
-    farm.when = { '.sv': 'timestamp' };
-    farm.who = this.auth.password.email;
-    let url = this._url + "/farms" + ".json";
-    console.log(url);
-    return this.http.post(url, JSON.stringify(farm)).toPromise()
-      .then(res => console.log(res.json()), this.handleError);
-  }
-
-  addPlant(plant: any) {
-    plant.when = { '.sv': 'timestamp' };
-    plant.who = this.auth.password.email;
-    let url = this._url + "/plants" + ".json";
-    console.log(url);
-    return this.http.post(url, JSON.stringify(plant)).toPromise()
-      .then(res => console.log(res.json()), this.handleError);
-  }
-
-  getFirebaseHarvestLog(day: string) {
-    let url = this._url + "/harvest/" + day + ".json";
-/*
-    //auto push socket works!!
-    var fb = new Firebase(this._url + "/" + day);
-    fb.on("value", function (snapshot) {
-      console.log(snapshot.val());
-    }, function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
-    });
 */
+  private auth = {password: {email: "testing..."}};
+
+  getThings(suffix: string): Promise<any> {
+    let url = this._url + "/" + suffix + ".json";
     console.log(url);
-    return this.http.get(url).toPromise().then(res => res, this.handleError);
+    return this.http.get(url).toPromise().then(res => res.json(), this.handleError);
   }
+
+  getFarms(): Promise<any> { return this.getThings("farms"); }
+  getPlants(): Promise<any> { return this.getThings("plants"); }
+  getHarvestLog(day: string): Promise<any> { return this.getThings("harvest/"+day); }
+
+  addThing(suffix: string, thing: any): Promise<any> {
+    thing.when = { '.sv': 'timestamp' };
+    thing.who = this.auth.password.email;
+    let url = this._url + "/" + suffix + ".json";
+    console.log(url);
+    return this.http.post(url, JSON.stringify(thing)).toPromise()
+      .then(res => console.log(res.json()), this.handleError);
+  }
+
+  addFarm(farm: any): Promise<any> { return this.addThing("farms", farm); }
+  addPlant(plant: any): Promise<any> { return this.addThing("plants", plant); }
+  addHarvest(harvest: any): Promise<any> { return this.addThing("harvest/"+harvest.day, harvest); }
 
   authenticate(email: string, password: string): Promise<any> {
     let self = this;

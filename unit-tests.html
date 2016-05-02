@@ -19,7 +19,10 @@
   <script src="node_modules/systemjs/dist/system.src.js"></script>
   <script src="node_modules/rxjs/bundles/Rx.js"></script>
   <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+  <script src="node_modules/angular2/bundles/router.dev.js"></script>
+  <script src="node_modules/angular2/bundles/http.dev.js"></script>
   <script src="node_modules/angular2/bundles/testing.dev.js"></script>
+  <script src="node_modules/firebase/lib/firebase-web.js"></script>
 
   <script>
     // #2. Configure systemjs to use the .js extension
@@ -33,8 +36,8 @@
     // #3. Import the spec file explicitly
  Promise.all([
     System.import('app/test.setup'),
-    System.import('app/data/mockbase.service'),
     System.import('app/data/mockbase.service.spec'),
+    System.import('app/data/data.service.spec'),
     System.import('app/sample.spec'),
   ])
       // #4. wait for all imports to load ...
