@@ -14,6 +14,7 @@ export class FirebaseService {
   private fbRoot = null;
   
   constructor(private http: Http) {
+    //oh this calls server even when the object is just created
     this.fbRoot = new Firebase(this._url);
   }
 

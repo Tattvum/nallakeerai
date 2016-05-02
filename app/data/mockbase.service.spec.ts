@@ -101,7 +101,7 @@ describe('Mockbase', () => {
     });
   }));
   
-  it('autheticate test:test only', inject([MockbaseService], (service: MockbaseService) => {
+  it('autheticate test/test only', inject([MockbaseService], (service: MockbaseService) => {
     return Promise.all([
       service.authenticate("test", "test").then((auth) => {
         expect(auth).toEqual({uid: "123", email: "test", token: "xyz"});

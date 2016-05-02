@@ -50,33 +50,7 @@ export class DataService {
 
   //--------------------------------------------------------------------------------------
 
-  private setDate(d: Date) {
-    date = d;
-    day = this.getDayString();
-    console.log("SET: " + day);
-  }
-
-  getDayString(): string {
-    return date.toISOString().slice(0, 10);
-  }
-
-  moveDay(offset: number) {
-    date.setDate(date.getDate() + offset);
-    this.setDate(date);
-    this.setupHarvestLog(day).then(() => {
-      this.computeGrid();
-      console.log("moveDay done.");
-    });
-  }
-
-  getDate(): Date {
-    console.log("GET: " + date);
-    return date;
-  }
-
-  //--------------------------------------------------------------------------------------
-
-  ensureNonNullGrid() {
+  private ensureNonNullGrid() {
     if (ALL_TOTAL == null) ALL_TOTAL = {quantity: 0};
     FARMS.forEach((f) => {
       if (FARM_TOTALS[f.code] == null) FARM_TOTALS[f.code] = 0;
@@ -93,7 +67,7 @@ export class DataService {
     //console.log("ensureNonNullGrid done...");
   }
 
-  zeroGrid() {
+  private zeroGrid() {
     this.ensureNonNullGrid();
 
     ALL_TOTAL.quantity = 0;
@@ -103,7 +77,7 @@ export class DataService {
     //console.log("zeroGrid done...");
   }
 
-  computeGrid() {
+  private computeGrid() {
     this.zeroGrid();
 
     HARVEST_LOG.forEach(h => {
@@ -115,7 +89,7 @@ export class DataService {
     console.log("computation complete...");
   }
 
-  addQuantity(f: string, p: string, q: number) {
+  private addQuantity(f: string, p: string, q: number) {
     PLANT_TOTALS[p] += q;
     FARM_TOTALS[f] += q;
     ALL_TOTAL.quantity += q;
@@ -124,30 +98,64 @@ export class DataService {
 
   //--------------------------------------------------------------------------------------
 
-  harvest(f: string, p: string, q: number) {
+  private setDate(d: Date) {
+    date = d;
+    day = this.getDayString();
+    console.log("SET: " + day);
+  }
+
+  getDayString(): string {
+    return date.toISOString().slice(0, 10);
+  }
+
+  moveDay(offset: number): Promise<any> {
+    date.setDate(date.getDate() + offset);
+    this.setDate(date);
+    return this.setupHarvestLog(day).then(() => {
+      this.computeGrid();
+      console.log("moveDay done.");
+    });
+  }
+
+  getDate(): Date {
+    console.log("GET: " + date);
+    return date;
+  }
+
+  //--------------------------------------------------------------------------------------
+
+  addHarvest(f: string, p: string, q: number): Promise<any> {
     console.log("NEW HARVEST: " + q);
     let harvest = { day: day, farm: f, plant: p, quantity: q };
     HARVEST_LOG.push(harvest);
     this.addQuantity(f, p, q);
-    this.service.addHarvest(harvest);
+    return this.service.addHarvest(harvest);
   }
 
-  addFarm(code: string) {
+  addFarm(code: string): Promise<any> {
     let farm = {code: code};
     console.log("ADD FARM: " + code);
     FARMS.push(farm);
     this.computeGrid();
-    this.service.addFarm(farm);
+    return this.service.addFarm(farm);
 }
 
-  addPlant(code: string) {
+  addPlant(code: string): Promise<any> {
     let plant = {code: code};
     console.log("ADD PLANT: " + code);
     PLANTS.push(plant);
     this.computeGrid();
-    this.service.addPlant(plant);
+    return this.service.addPlant(plant);
   }
 
+  //--------------------------------------------------------------------------------------
+    //TBD: assume the inputs are valid, for now!
+
+  getHarvest(farm: string, plant: string): number { return BUNDLES[farm][plant]; }
+  getFarmTotal(farm: string): number { return FARM_TOTALS[farm]; }
+  getPlantTotal(plant: string): number { return PLANT_TOTALS[plant]; }
+  getGrandTotal(): number { return ALL_TOTAL.quantity; }
+  
   //--------------------------------------------------------------------------------------
 
   getAll() {

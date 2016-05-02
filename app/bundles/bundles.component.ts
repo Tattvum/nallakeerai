@@ -59,7 +59,7 @@ export class BundlesComponent {
   }
 
   onSubmit() {
-    this.service.harvest(this.farm, this.plant, this.quantity);
+    this.service.addHarvest(this.farm, this.plant, this.quantity);
     this.showEditor = false;
   }
 
