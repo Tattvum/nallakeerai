@@ -5,24 +5,26 @@
   font-size: 12px;
 }
 
-th, td {
-  padding: 5px;
-  border: 1px solid grey;
-  text-align: center;
-}
-
 .clickable {
   cursor: pointer;
   cursor: hand;
   color: blue;
 }
 
-td:hover {
-  background-color: lightyellow;
+table {
+  max-width: 600px;
 }
 
-th {
-  font-size: 12px;
+.data {
+  text-align: center;
+}
+
+.center {
+  text-align: center;
+}
+
+.data:hover {
+  background-color: lightyellow;
 }
 
 .highlight {
@@ -43,8 +45,13 @@ th {
   color: maroon;
 }
 
+.light {
+  color: #ccc;
+  font-style: italic;
+}
+
 .grand {
-  font-size: 14px;
+  font-size: 20px;
   color: red;
 }
 
@@ -56,11 +63,11 @@ th {
 
 .timeMode {
   padding-top: 15px;
-  padding-left: 20px;
+  padding-left: 10px;
   font-size: 14px;
   text-align: left;
+  color: #ccc;
 }
-
 
 .value {
   color: red;
@@ -68,5 +75,5 @@ th {
 }
 
 form {
-  max-width: 100px;
+  max-width: 200px;
 }

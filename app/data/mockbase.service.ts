@@ -4,7 +4,11 @@ import { Harvest }     from './harvest';
 
 class Container {
   constructor(public arr: any[] = [], public obj: any = {}){};
-};
+}
+
+function log(msg: any, obj: any = "") {
+  //console.log(msg, obj);
+}
 
 @Injectable()
 export class MockbaseService {

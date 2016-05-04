@@ -1,3 +1,7 @@
-<span (click)="clickPrev($event)"> << </span>&nbsp;&nbsp;
-<span (click)="clickNow($event)">{{ showDay() }}</span>&nbsp;&nbsp;
-<span (click)="clickNext($event)"> >> </span>
+<button [disabled]="isProcessing" (click)="clickPrev($event)"> 
+  << </button>&nbsp;&nbsp;
+<button class="primary" [disabled]="isProcessing" (click)="clickNow($event)">
+  {{ showDay() }}</button>&nbsp;&nbsp;
+<button [disabled]="isProcessing" (click)="clickNext($event)"> 
+  >> </button>
+<span class="processing" *ngIf="isProcessing">processing...</span>

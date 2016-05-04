@@ -21,8 +21,8 @@ let ALL_TOTAL: { quantity: number } = { quantity: 0 };
 let FARMS: { code: string }[] = [];
 let PLANTS: { code: string }[] = [];
 
-function log(msg: any) {
-  console.log(msg);
+function log(msg: any, obj: any = "") {
+  console.log(msg, obj);
 }
 
 const dows = ['sun','mon','tue','wed','thu','fri','sat'];
@@ -118,9 +118,9 @@ export class DataService {
       return this.setupHarvestLogByTimeMode();
     }).then((obj) => {
       this.computeGrid();
-      log('----- setup:: (' + HARVEST_LOG.length 
+      log('--setup:(' + HARVEST_LOG.length 
           +') '+ this.getDayString()+' ['+ALL_TOTAL.quantity+']'
-          + this.timeMode);
+          + ((this.timeMode==TimeMode.DAY)?"D":"W"));
       return Promise.resolve();
     });
   }
@@ -159,6 +159,8 @@ export class DataService {
     HARVEST_LOG.forEach(h => {
       this.addQuantity(h.farm, h.plant, h.quantity);
     });
+    
+    log("FARMS: "+FARMS.length + ", PLANTS: " + PLANTS.length);
   }
 
   private zeroGrid() {
@@ -208,10 +210,12 @@ export class DataService {
   
   //harvest this day as in grid
   addHarvest(f: string, p: string, q: number): Promise<any> {
+    if(this.timeMode === TimeMode.WEEK) throw "Donot call this is in WEEK mode.";
     return this.addHarvestOnDay(this.getDayString(), f, p, q);
   }
 
   addHarvestInWeek(dow: DOW, f: string, p: string, q: number): Promise<any> {
+    if(this.timeMode === TimeMode.DAY) throw "Donot call this is in DAY mode.";
     let d = new Date(this.date.getTime());
     let offset = (d.getDay() -1 + 7) % 7;
     d.setDate(d.getDate() + offset + dow);
@@ -221,6 +225,7 @@ export class DataService {
   }
 
   addFarm(code: string): Promise<any> {
+    if(this.timeMode === TimeMode.WEEK) throw "Donot call this is in WEEK mode.";
     let farm = { code: code };
     log("ADD FARM: " + code);
     FARMS.push(farm);
@@ -229,6 +234,7 @@ export class DataService {
   }
 
   addPlant(code: string): Promise<any> {
+    if(this.timeMode === TimeMode.WEEK) throw "Donot call this is in WEEK mode.";
     let plant = { code: code };
     log("ADD PLANT: " + code);
     PLANTS.push(plant);
@@ -247,6 +253,7 @@ export class DataService {
   //--------------------------------------------------------------------------------------
 
   getAll() {
+    log('getAll called.');
     return Promise.resolve({
       farms: FARMS,
       plants: PLANTS,

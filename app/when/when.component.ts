@@ -12,6 +12,8 @@ declare var __moduleName: string;
 })
 export class WhenComponent {
 
+  isProcessing: boolean = false;
+
   showDay() {//wow, a nice way to listen to variable changes - use gui
     return this.service.showWhen();
   }
@@ -19,15 +21,24 @@ export class WhenComponent {
   constructor(private service: DataService) {}
 
   clickPrev(event) {
-    this.service.prev();
+    this.isProcessing= true;
+    this.service.prev()
+      .then(()=>{this.isProcessing= false})
+      .catch(()=>{this.isProcessing= false});
   }
 
   clickNow(event) {
-    this.service.toggleDayWeek();
+    this.isProcessing= true;
+    this.service.toggleDayWeek()
+      .then(()=>{this.isProcessing= false})
+      .catch(()=>{this.isProcessing= false});
   }
 
   clickNext(event) {
-    this.service.next();
+    this.isProcessing= true;
+    this.service.next()
+      .then(()=>{this.isProcessing= false})
+      .catch(()=>{this.isProcessing= false});
   }
 
 }

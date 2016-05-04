@@ -17,8 +17,8 @@ import { MockbaseService } from './mockbase.service';
 
 //-----------------------------------------------------------------------------
 
-function log(msg: any) {
-  //console.log(msg);
+function log(msg: any, obj: any = "") {
+  //console.log(msg, obj);
 }
 
 //setTimeout that returns a promise

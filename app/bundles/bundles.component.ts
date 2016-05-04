@@ -5,6 +5,10 @@ import { DataService, TimeMode }   from '../data/data.service';
 // Let TypeScript know about the special SystemJS __moduleName variable
 declare var __moduleName: string;
 
+function log(msg: any, obj: any = "") {
+  console.log(msg, obj);
+}
+
 @Component({
   moduleId: __moduleName,
   selector: 'bundles',
@@ -21,8 +25,8 @@ export class BundlesComponent {
   @ViewChild('editor') editor: ElementRef;
 
   constructor(private service: DataService, private ngZone: NgZone, private renderer: Renderer) {
-    this.service.getAll().then(all => {
-      this.all = all;
+    this.service.getAll().then(_all => {
+      this.all = _all;
     });
   }
 
@@ -41,11 +45,11 @@ export class BundlesComponent {
   }
 
   isDay(): boolean {
-    return this.service.getTimeMode() == TimeMode.DAY; 
+    return this.service.getTimeMode() == TimeMode.DAY;
   }
 
   timeMode(): string {
-    return this.isDay() ? "Day Mode": "Week mode";
+    return this.isDay() ? "Day Mode" : "Week mode";
   }
 
   private focusEditor() {
@@ -58,12 +62,20 @@ export class BundlesComponent {
     });
   }
 
+  escape(event) {
+    if (event.keyCode &&event.keyCode == 27) this.close();
+  }
+
+  close() {
+    this.showEditor = false;
+  }
+
   editHarvest(farm: string, plant: string) {
     this.showEditor = this.isDay();
-    if(!this.showEditor) return;
+    if (!this.showEditor) return;
     this.farm = farm;
     this.plant = plant;
-    this.quantity = 0;
+    this.quantity = null;
     this.focusEditor();
   }
 
@@ -73,12 +85,28 @@ export class BundlesComponent {
   }
 
   addFarm() {
+    if(!this.isDay()) return;
     let code = prompt("Farm Code:");
-    if (code != null) this.service.addFarm(code);
+    if (code == null || code.trim() == "") return;
+     
+    //HACK: why is this required after switching TimeMode?
+    this.service.addFarm(code).then(()=>{
+      return this.service.getAll().then(_all=>{
+        this.all = _all;
+      });
+    });
   }
 
   addPlant() {
+    if(!this.isDay()) return;
     let code = prompt("Plant Code:");
-    if (code != null) this.service.addPlant(code);
+    if (code == null || code.trim() == "") return;
+
+    //HACK: why is this required after switching TimeMode?
+    this.service.addPlant(code).then(()=>{
+      return this.service.getAll().then(_all=>{
+        this.all = _all;
+      });
+    });
   }
 }

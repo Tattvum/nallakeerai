@@ -1,19 +1,48 @@
+<div class="container" *ngIf="showEditor && isDay()">
+  <form (ngSubmit)="onSubmit()" #harvestForm="ngForm">
+
+    <div class="form-group">
+      <label for="comment">Add Bundles <i><small>(-ve for remove)</small></i></label>
+      <input type="number" #editor (keydown)="escape($event)"
+          class="form-control" required autofocus 
+          [placeholder]="0" [(ngModel)]="quantity">
+    </div>
+
+    <button type="submit" class="btn btn-default" [disabled]="!harvestForm.form.valid">Save</button>
+    <button type="reset" (click)="close()" 
+        class="btn btn-default">Cancel</button>
+
+  </form>
+</div>
+
 <div *ngIf="all != null && all.bundles != null">
   <div class="timeMode">{{ timeMode() }}</div> 
-  <table class="box">
+  <table class="table">
+    
     <tr>
       <th></th>
-      <th *ngFor="let plant of all.plants">
-        {{plant.code}}
-      </th>
-      <th (click)="addPlant()">+</th>
-    </tr>
-
-    <tr *ngFor="let farm of all.farms">
-      <th>
+      <th class="center" *ngFor="let farm of all.farms">
         {{farm.code}}
       </th>
-      <td *ngFor="let plant of all.plants" 
+      <td (click)="addFarm()"
+          [ngClass]="{clickable: isDay()}">+</td>
+    </tr>
+
+    <tr>
+      <td class="light">Totals</td>
+      <th class="total center" *ngFor="let farm of all.farms">
+        {{all.farmTotals[farm.code]}}
+      </th>
+      <th class="total grand">
+        {{all.allTotal.quantity}}
+      </th>
+    </tr>
+
+    <tr *ngFor="let plant of all.plants">
+      <th>
+        {{plant.code}}
+      </th>
+      <td class="data" *ngFor="let farm of all.farms" 
               (click)="editHarvest(farm.code, plant.code)" 
               [ngClass]="{
                 selected: isSelected(farm.code, plant.code), 
@@ -23,31 +52,21 @@
         {{ bundle(farm.code, plant.code) }}
       </td>
       <th class="total">
-        {{all.farmTotals[farm.code]}}
+        {{all.plantTotals[plant.code]}}
       </th>
     </tr>
-
+   
     <tr>
-      <th (click)="addFarm()">+</th>
-      <th class="total" *ngFor="let plant of all.plants">
-        {{all.plantTotals[plant.code]}}
+      <td (click)="addPlant()" 
+          [ngClass]="{clickable: isDay()}">+</td>
+      <th class="total center" *ngFor="let farm of all.farms">
+        {{all.farmTotals[farm.code]}}
       </th>
       <th class="total grand">
         {{all.allTotal.quantity}}
       </th>
     </tr>
+
   </table>
 </div>
 
-<div class="container" *ngIf="showEditor && isDay()">
-  <form (ngSubmit)="onSubmit()" #harvestForm="ngForm">
-
-    <div class="form-group">
-      <label for="comment">Add Bundles <i><small>(-ve for remove)</small></i></label>
-      <input type="number" #editor class="form-control" autofocus [(ngModel)]="quantity">
-    </div>
-
-    <button type="submit" class="btn btn-default" [disabled]="!harvestForm.form.valid">Save</button>
-
-  </form>
-</div>

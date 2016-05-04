@@ -4,6 +4,10 @@ import {Observable}     from 'rxjs/Observable';
 
 import { Harvest }     from './harvest';
 
+function log(msg: any, obj: any = "") {
+  //console.log(msg, obj);
+}
+
 @Injectable()
 export class FirebaseService {
 
@@ -26,7 +30,7 @@ export class FirebaseService {
 
   getThings(suffix: string): Promise<any> {
     let url = this._url + "/" + suffix + ".json";
-    console.log(url);
+    log(url);
     return this.http.get(url).toPromise().then(res => res.json(), this.handleError);
   }
 
@@ -38,9 +42,9 @@ export class FirebaseService {
     thing.when = { '.sv': 'timestamp' };
     thing.who = this.auth.password.email;
     let url = this._url + "/" + suffix + ".json";
-    console.log(url);
+    log(url);
     return this.http.post(url, JSON.stringify(thing)).toPromise()
-      .then(res => console.log(res.json()), this.handleError);
+      .then(res => log(res.json()), this.handleError);
   }
 
   addFarm(farm: any): Promise<any> { return this.addThing("farms", farm); }
@@ -56,11 +60,11 @@ export class FirebaseService {
         password: password
       }, function (error, authData) {
         if (error) {
-          console.log("Login Failed!", error);
+          log("Login Failed!", error);
           reject(error);
         } else {
           self.auth = authData;
-          console.log(self.auth.password.email);
+          log(self.auth.password.email);
           resolve(authData);
         }
       });
