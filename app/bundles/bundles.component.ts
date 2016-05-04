@@ -6,7 +6,7 @@ import { DataService, TimeMode }   from '../data/data.service';
 declare var __moduleName: string;
 
 function log(msg: any, obj: any = "") {
-  console.log(msg, obj);
+  //console.log(msg, obj);
 }
 
 @Component({

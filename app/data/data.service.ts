@@ -22,7 +22,7 @@ let FARMS: { code: string }[] = [];
 let PLANTS: { code: string }[] = [];
 
 function log(msg: any, obj: any = "") {
-  console.log(msg, obj);
+  //console.log(msg, obj);
 }
 
 const dows = ['sun','mon','tue','wed','thu','fri','sat'];
@@ -97,9 +97,9 @@ export class DataService {
 
 //--------------------------------------------------------------------------------------
 
-//  IMPORTANT TBD 4/4 - - uncomment and use this in production deployment
-//  constructor(private service: FirebaseService) {
-  constructor(private service: MockbaseService) {
+  //IMPORTANT TBD 4/4 - - uncomment and use this in production deployment
+  constructor(private service: FirebaseService) {
+  //constructor(private service: MockbaseService) {
     this.now();
   }
 
@@ -204,7 +204,6 @@ export class DataService {
     HARVEST_LOG.push(harvest);
     //assume the grid is for same
     this.addQuantity(f, p, q);
-    //TBD3: ensure server is ready for week
     return this.service.addHarvest(harvest);
   }
   

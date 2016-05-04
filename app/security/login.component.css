@@ -10,5 +10,5 @@
 }
 
 form {
-  width: 25%;
+  max-width: 300px;
 }
