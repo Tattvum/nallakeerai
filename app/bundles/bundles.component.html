@@ -1,4 +1,5 @@
 <div *ngIf="all != null && all.bundles != null">
+  <div class="timeMode">{{ timeMode() }}</div> 
   <table class="box">
     <tr>
       <th></th>
@@ -16,7 +17,8 @@
               (click)="editHarvest(farm.code, plant.code)" 
               [ngClass]="{
                 selected: isSelected(farm.code, plant.code), 
-                highlight: isHighlighted(farm.code, plant.code)
+                highlight: isHighlighted(farm.code, plant.code),
+                clickable: isDay()
               }">
         {{ bundle(farm.code, plant.code) }}
       </td>
@@ -37,7 +39,7 @@
   </table>
 </div>
 
-<div class="container" *ngIf="showEditor">
+<div class="container" *ngIf="showEditor && isDay()">
   <form (ngSubmit)="onSubmit()" #harvestForm="ngForm">
 
     <div class="form-group">

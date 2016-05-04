@@ -6,11 +6,11 @@ import { Harvest }     from './harvest';
 
 @Injectable()
 export class FirebaseService {
-/*  
-  //IMPORTANT TBD 1/4 - uncomment and use this in production deployment
-  private _url = 'https://nallakeerai-nsp.firebaseio.com';
-*/
+
+//  IMPORTANT TBD 1/4 - uncomment and use this in production deployment
+//  private _url = 'https://nallakeerai-nsp.firebaseio.com';
   private _url = 'https://nallakeerai-nsp.firebaseio.com/testroot';
+
   private fbRoot = null;
   
   constructor(private http: Http) {

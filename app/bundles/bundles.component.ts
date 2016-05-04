@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, ElementRef, NgZone, Renderer } from 'angular2/core';
 
-import { DataService }   from '../data/data.service';
+import { DataService, TimeMode }   from '../data/data.service';
 
 // Let TypeScript know about the special SystemJS __moduleName variable
 declare var __moduleName: string;
@@ -33,11 +33,19 @@ export class BundlesComponent {
   }
 
   isSelected(farm: string, plant: string): boolean {
-    return this.farm == farm && this.plant == plant;
+    return this.isDay() && this.farm == farm && this.plant == plant;
   }
 
   isHighlighted(farm: string, plant: string): boolean {
-    return this.farm == farm || this.plant == plant;
+    return this.isDay() && (this.farm == farm || this.plant == plant);
+  }
+
+  isDay(): boolean {
+    return this.service.getTimeMode() == TimeMode.DAY; 
+  }
+
+  timeMode(): string {
+    return this.isDay() ? "Day Mode": "Week mode";
   }
 
   private focusEditor() {
@@ -51,7 +59,8 @@ export class BundlesComponent {
   }
 
   editHarvest(farm: string, plant: string) {
-    this.showEditor = true;
+    this.showEditor = this.isDay();
+    if(!this.showEditor) return;
     this.farm = farm;
     this.plant = plant;
     this.quantity = 0;

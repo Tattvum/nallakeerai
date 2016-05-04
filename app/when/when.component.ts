@@ -13,21 +13,21 @@ declare var __moduleName: string;
 export class WhenComponent {
 
   showDay() {//wow, a nice way to listen to variable changes - use gui
-    return this.service.getDayString();
+    return this.service.showWhen();
   }
 
   constructor(private service: DataService) {}
 
   clickPrev(event) {
-    this.service.moveDay(-1);
+    this.service.prev();
   }
 
   clickNow(event) {
-    //this.day = this.service.getDayString();
+    this.service.toggleDayWeek();
   }
 
   clickNext(event) {
-    this.service.moveDay(+1);
+    this.service.next();
   }
 
 }
