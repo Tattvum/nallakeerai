@@ -1,19 +1,19 @@
-import { Component, Input, ViewChild, ElementRef, NgZone, Renderer } from 'angular2/core';
+import { Component, Input, ViewChild, ElementRef, NgZone, Renderer } from '@angular/core';
 
 import { DataService, TimeMode }   from '../data/data.service';
 
 // Let TypeScript know about the special SystemJS __moduleName variable
-declare var __moduleName: string;
+//declare var __moduleName: string;
 
 function log(msg: any, obj: any = "") {
   //console.log(msg, obj);
 }
 
 @Component({
-  moduleId: __moduleName,
+//  moduleId: __moduleName,
   selector: 'bundles',
-  templateUrl: 'bundles.component.html',
-  styleUrls: ['bundles.component.css'],
+  templateUrl: 'app/bundles/bundles.component.html',
+  styleUrls: ['app/bundles/bundles.component.css'],
 })
 export class BundlesComponent {
   private all;

@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 
 import { Thing }   from './thing';
 import { Harvest }   from './harvest';
@@ -98,8 +98,8 @@ export class DataService {
 //--------------------------------------------------------------------------------------
 
   //IMPORTANT TBD 4/4 - - uncomment and use this in production deployment
-  constructor(private service: FirebaseService) {
-  //constructor(private service: MockbaseService) {
+  //constructor(private service: FirebaseService) {
+  constructor(private service: MockbaseService) {
     this.now();
   }
 

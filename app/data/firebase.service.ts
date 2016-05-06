@@ -1,5 +1,5 @@
-import {Injectable} from 'angular2/core';
-import {Http, Response} from 'angular2/http';
+import {Injectable} from '@angular/core';
+import {Http, Response} from '@angular/http';
 import {Observable}     from 'rxjs/Observable';
 
 import { Harvest }     from './harvest';
@@ -12,9 +12,8 @@ function log(msg: any, obj: any = "") {
 export class FirebaseService {
 
 //  IMPORTANT TBD 1/4 - uncomment and use this in production deployment
-  private _url = 'https://nallakeerai-nsp.firebaseio.com';
-//  private _url = 'https://nallakeerai-nsp.firebaseio.com/testroot';
-
+//  private _url = 'https://nallakeerai-nsp.firebaseio.com';
+  private _url = 'https://sizzling-heat-796.firebaseio.com/testroot';
   private fbRoot = null;
   
   constructor(private http: Http) {
@@ -23,8 +22,8 @@ export class FirebaseService {
   }
 
   //IMPORTANT TBD 3B/4 - uncomment and use this in production deployment
-  private auth: any;
-  //private auth = {password: {email: "testing..."}};
+  //private auth: any;
+  private auth = {password: {email: "testing..."}};
 
   getThings(suffix: string): Promise<any> {
     let url = this._url + "/" + suffix + ".json";
