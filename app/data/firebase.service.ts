@@ -14,7 +14,7 @@ export class FirebaseService {
 //  IMPORTANT TBD 1/4 - uncomment and use this in production deployment
 //  private _url = 'https://nallakeerai-nsp.firebaseio.com';
   private _url = 'https://sizzling-heat-796.firebaseio.com/testroot';
-  private fbRoot = null;
+  private fbRoot: any = null;
   
   constructor(private http: Http) {
     //oh this calls server even when the object is just created
@@ -22,13 +22,17 @@ export class FirebaseService {
   }
 
   //IMPORTANT TBD 3B/4 - uncomment and use this in production deployment
-  //private auth: any;
-  private auth = {password: {email: "testing..."}};
+  private auth: any;
+  //private auth = {password: {email: "testing..."}};
+
+  private url(suffix: string): string {
+    let url = this._url + "/" + suffix + ".json?auth="+this.auth.token;
+    log(url);
+    return url;
+  }
 
   getThings(suffix: string): Promise<any> {
-    let url = this._url + "/" + suffix + ".json";
-    log(url);
-    return this.http.get(url).toPromise().then(res => res.json(), this.handleError);
+    return this.http.get(this.url(suffix)).toPromise().then(res => res.json(), this.handleError);
   }
 
   getFarms(): Promise<any> { return this.getThings("farms"); }
@@ -38,9 +42,7 @@ export class FirebaseService {
   addThing(suffix: string, thing: any): Promise<any> {
     thing.when = { '.sv': 'timestamp' };
     thing.who = this.auth.password.email;
-    let url = this._url + "/" + suffix + ".json";
-    log(url);
-    return this.http.post(url, JSON.stringify(thing)).toPromise()
+    return this.http.post(this.url(suffix), JSON.stringify(thing)).toPromise()
       .then(res => log(res.json()), this.handleError);
   }
 
