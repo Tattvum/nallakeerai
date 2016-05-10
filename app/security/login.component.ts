@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm }    from '@angular/common';
-import { Router } from '@angular/router';
+import { Router } from '@angular/router-deprecated';
 
 import { SecurityService }   from './security.service';
 
