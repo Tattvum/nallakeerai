@@ -22,7 +22,7 @@ function log(msg: any, obj: any = "") {
 }
 
 //setTimeout that returns a promise
-function delay(ms): Promise<any> {
+function delay(ms: number): Promise<any> {
   return new Promise((resolve, reject) => {
     setTimeout(() => resolve(), ms);
   });
