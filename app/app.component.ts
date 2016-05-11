@@ -11,14 +11,14 @@ import { MockbaseService } from './data/mockbase.service';
 import { SecurityService } from './security/security.service';
 import { User } from './security/user';
 
-// Let TypeScript know about the special SystemJS __moduleName variable
-//declare var __moduleName: string;
+//Let TypeScript know about the special CommonJS module.id variable
+declare var module: {id: string};
 
 @Component({
-//  moduleId: __moduleName,
+  moduleId: module.id,
   selector: 'app',
-  templateUrl: 'app/app.component.html',
-  styleUrls: ['app/app.component.css'],
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css'],
   directives: [ROUTER_DIRECTIVES, WhenComponent],
   providers: [DataService, FirebaseService,, MockbaseService, SecurityService],
 })
@@ -28,8 +28,8 @@ import { User } from './security/user';
 ])
 export class AppComponent implements OnInit {
   //IMPORTANT TBD 3A/4 - uncomment and use this in production deployment
-  //user: User = null;
-  user: User = {uid: "", email: "testing...", token:""};
+  user: User = null;
+  //user: User = {uid: "", email: "testing...", token:""};
 
   constructor(private router: Router, private service: SecurityService) {
     service.authenticated$.subscribe( user => this.user = user );

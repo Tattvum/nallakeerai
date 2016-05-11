@@ -4,14 +4,14 @@ import { Router } from '@angular/router-deprecated';
 
 import { SecurityService }   from './security.service';
 
-// Let TypeScript know about the special SystemJS __moduleName variable
-//declare var __moduleName: string;
+//Let TypeScript know about the special CommonJS module.id variable
+declare var module: {id: string};
 
 @Component({
-//  moduleId: __moduleName,
+  moduleId: module.id,
   selector: 'login',
-  templateUrl: 'app/security/login.component.html',
-  styleUrls: ['app/security/login.component.css'],
+  templateUrl: 'login.component.html',
+  styleUrls: ['login.component.css'],
 })
 export class LoginComponent {
   

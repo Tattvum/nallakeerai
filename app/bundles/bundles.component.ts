@@ -2,18 +2,14 @@ import { Component, Input, ViewChild, ElementRef, NgZone, Renderer } from '@angu
 
 import { DataService, TimeMode }   from '../data/data.service';
 
-// Let TypeScript know about the special SystemJS __moduleName variable
-//declare var __moduleName: string;
-
-function log(msg: any, obj: any = "") {
-  //console.log(msg, obj);
-}
+//Let TypeScript know about the special CommonJS module.id variable
+declare var module: {id: string};
 
 @Component({
-//  moduleId: __moduleName,
+  moduleId: module.id,
   selector: 'bundles',
-  templateUrl: 'app/bundles/bundles.component.html',
-  styleUrls: ['app/bundles/bundles.component.css'],
+  templateUrl: 'bundles.component.html',
+  styleUrls: ['bundles.component.css'],
 })
 export class BundlesComponent {
   private all;
