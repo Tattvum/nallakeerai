@@ -1,11 +1,11 @@
 import {setBaseTestProviders} from '@angular/core/testing';
 import {
-    TEST_BROWSER_PLATFORM_PROVIDERS,
-    TEST_BROWSER_APPLICATION_PROVIDERS
-} from '@angular/platform/testing/browser';
+    TEST_BROWSER_STATIC_PLATFORM_PROVIDERS,
+    TEST_BROWSER_STATIC_APPLICATION_PROVIDERS
+} from '@angular/platform-browser/testing';
 
 setBaseTestProviders(
-    TEST_BROWSER_PLATFORM_PROVIDERS,
-    TEST_BROWSER_APPLICATION_PROVIDERS
+    TEST_BROWSER_STATIC_PLATFORM_PROVIDERS,
+    TEST_BROWSER_STATIC_APPLICATION_PROVIDERS
 );
 
