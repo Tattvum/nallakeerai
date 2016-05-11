@@ -4,7 +4,7 @@
     <div class="form-group">
       <label for="comment">Add Bundles <i><small>(-ve for remove)</small></i></label>
       <input type="number" #editor (keydown)="escape($event)"
-          class="form-control" required autofocus 
+          id="editor" class="form-control" required autofocus 
           [placeholder]="0" [(ngModel)]="quantity">
     </div>
 
@@ -17,14 +17,14 @@
 
 <div *ngIf="all != null && all.bundles != null">
   <div class="timeMode">{{ timeMode() }}</div> 
-  <table class="table">
+  <table id="data" class="table">
     
     <tr>
       <th></th>
       <th class="center" *ngFor="let farm of all.farms">
         {{farm.code}}
       </th>
-      <td (click)="addFarm()"
+      <td id="addFarm" (click)="addFarm()"
           [ngClass]="{clickable: isDay()}">+</td>
     </tr>
 
@@ -57,7 +57,7 @@
     </tr>
    
     <tr>
-      <td (click)="addPlant()" 
+      <td id="addPlant" (click)="addPlant()" 
           [ngClass]="{clickable: isDay()}">+</td>
       <th class="total center" *ngFor="let farm of all.farms">
         {{all.farmTotals[farm.code]}}

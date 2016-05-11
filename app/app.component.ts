@@ -28,8 +28,8 @@ declare var module: {id: string};
 ])
 export class AppComponent implements OnInit {
   //IMPORTANT TBD 3A/4 - uncomment and use this in production deployment
-  user: User = null;
-  //user: User = {uid: "", email: "testing...", token:""};
+  //user: User = null;
+  user: User = {uid: "", email: "testing...", token:""};
 
   constructor(private router: Router, private service: SecurityService) {
     service.authenticated$.subscribe( user => this.user = user );

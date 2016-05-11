@@ -66,43 +66,56 @@ export class BundlesComponent {
     this.showEditor = false;
   }
 
+  private refresh(): Promise<any> {
+    //HACK: why is this required after switching TimeMode?
+    return this.service.getAll().then( _all => {
+      this.all = _all;
+    });
+  }
+
+  private refreshThen(): ()=>void {
+    //HACK: How to return promise and use it in then?
+    return () => { this.refresh() };
+  }
+
+  addHarvestInternal(f: string, p: string, q: number) {
+    this.service.addHarvest(f, p, q).then(this.refreshThen());
+  }
+
   editHarvest(farm: string, plant: string) {
     this.showEditor = this.isDay();
     if (!this.showEditor) return;
+    this.focusEditor();
     this.farm = farm;
     this.plant = plant;
     this.quantity = null;
-    this.focusEditor();
   }
 
   onSubmit() {
-    this.service.addHarvest(this.farm, this.plant, this.quantity);
     this.showEditor = false;
+    this.addHarvestInternal(this.farm, this.plant, this.quantity);
   }
 
+  addFarmInternal(code: string) {
+    this.service.addFarm(code).then(this.refreshThen());
+  }
+  
   addFarm() {
     if(!this.isDay()) return;
     let code = prompt("Farm Code:");
     if (code == null || code.trim() == "") return;
-     
-    //HACK: why is this required after switching TimeMode?
-    this.service.addFarm(code).then(()=>{
-      return this.service.getAll().then(_all=>{
-        this.all = _all;
-      });
-    });
+    this.addFarmInternal(code); 
   }
 
+  addPlantInternal(code: string) {
+    this.service.addPlant(code).then(this.refreshThen());
+  }
+  
   addPlant() {
     if(!this.isDay()) return;
     let code = prompt("Plant Code:");
     if (code == null || code.trim() == "") return;
-
-    //HACK: why is this required after switching TimeMode?
-    this.service.addPlant(code).then(()=>{
-      return this.service.getAll().then(_all=>{
-        this.all = _all;
-      });
-    });
+    this.addPlantInternal(code); 
   }
+
 }

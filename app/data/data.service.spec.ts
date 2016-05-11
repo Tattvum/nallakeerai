@@ -28,6 +28,12 @@ function delay(ms: number): Promise<any> {
   });
 }
 
+function gap(): Promise<any> {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve());
+  });
+}
+
 function checkGrid(s: DataService, f: string, p: string, 
     fpq: number, fq: number, pq: number, qq: number) {
   expect(s.getHarvest(f, p)).toEqual(fpq);
@@ -119,7 +125,7 @@ describe('DataService', () => {
     //NOTE: by default it will be in DAY mode!
     expect(s.getTimeMode()).toEqual(TimeMode.DAY);
     //timeout is a hack to circumvent uncontrolled async calls in service constructor 
-    return delay(100).then(()=>{
+    return gap().then(()=>{
     }).then(()=>{
       //For the mock service, surely 1 day after 2016-05-03 will be empty
       return s.next();
@@ -170,7 +176,7 @@ describe('DataService', () => {
   
   it('harvest WEEK grid computation is fine', inject([DataService], (s: DataService, done) => {
     //the timeout hack
-    return delay(100).then(()=>{
+    return gap().then(()=>{
     }).then(()=>{
       log("< toggleDayWeek >");
       //go to the WEEK mode from the default DAY mode
@@ -207,7 +213,7 @@ describe('DataService', () => {
 
   it('harvest in WEEK == harvest on some day', inject([DataService], (s: DataService) => {
     //the timeout hack 
-    return delay(100).then(() => {
+    return gap().then(() => {
       //go to the WEEK mode from the default DAY mode
       return s.toggleDayWeek();
     }).then(()=>{
