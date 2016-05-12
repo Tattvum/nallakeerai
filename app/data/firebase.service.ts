@@ -5,17 +5,17 @@ import {Observable}     from 'rxjs/Observable';
 import { Harvest }     from './harvest';
 
 function log(msg: any, obj: any = "") {
-  //console.log(msg, obj);
+  console.log(msg, obj);
 }
 
 @Injectable()
 export class FirebaseService {
 
-//  IMPORTANT TBD 1/4 - uncomment and use this in production deployment
-//  private _url = 'https://nallakeerai-nsp.firebaseio.com';
+  //IMPORTANT TBD 1/4 - uncomment and use this in production deployment
+  //private _url = 'https://nallakeerai-nsp.firebaseio.com';
   private _url = 'https://sizzling-heat-796.firebaseio.com/testroot';
   private fbRoot: any = null;
-  
+
   constructor(private http: Http) {
     //oh this calls server even when the object is just created
     this.fbRoot = new Firebase(this._url);
@@ -26,18 +26,24 @@ export class FirebaseService {
   //private auth = {password: {email: "testing..."}};
 
   private url(suffix: string): string {
-    let url = this._url + "/" + suffix + ".json?auth="+this.auth.token;
+    let url = this._url + "/" + suffix + ".json?auth=" + this.auth.token;
     log(url);
     return url;
   }
 
+  private url2(suffix: string): string {
+    let url = this._url + "/" + suffix;
+    log(url);
+    return url;
+  }
+  
   getThings(suffix: string): Promise<any> {
     return this.http.get(this.url(suffix)).toPromise().then(res => res.json(), this.handleError);
   }
 
   getFarms(): Promise<any> { return this.getThings("farms"); }
   getPlants(): Promise<any> { return this.getThings("plants"); }
-  getHarvestLog(day: string): Promise<any> { return this.getThings("harvest/"+day); }
+  getHarvestLog(day: string): Promise<any> { return this.getThings("harvest/" + day); }
 
   addThing(suffix: string, thing: any): Promise<any> {
     thing.when = { '.sv': 'timestamp' };
@@ -48,12 +54,29 @@ export class FirebaseService {
 
   addFarm(farm: any): Promise<any> { return this.addThing("farms", farm); }
   addPlant(plant: any): Promise<any> { return this.addThing("plants", plant); }
-  addHarvest(harvest: any): Promise<any> { return this.addThing("harvest/"+harvest.day, harvest); }
+  addHarvest(harvest: any): Promise<any> { return this.addThing("harvest/" + harvest.day, harvest); }
+
+  private firebaseQuery(): Promise<any> {
+    return this.http.get(this.url("harvest")).toPromise().then(res => res.json(), this.handleError);
+  }
+
+  private checkFirebaseQuery() {
+    let fb = new Firebase(this.url2("harvest"));
+    var query = fb.orderByKey().startAt("2016-05-05").endAt("2016-05-07");
+    query.once("value", snap => {
+      log(snap.val());
+    });
+/*
+    this.firebaseQuery().then((obj)=>{
+      log(obj);
+    });
+*/
+  }
 
   authenticate(email: string, password: string): Promise<any> {
     let self = this;
     let fbr = this.fbRoot;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       fbr.authWithPassword({
         email: email,
         password: password
@@ -64,6 +87,7 @@ export class FirebaseService {
         } else {
           self.auth = authData;
           log(self.auth.password.email);
+          self.checkFirebaseQuery();
           resolve(authData);
         }
       });
