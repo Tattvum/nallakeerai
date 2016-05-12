@@ -4,9 +4,6 @@ import { Router } from '@angular/router-deprecated';
 
 import { SecurityService }   from './security.service';
 
-//Let TypeScript know about the special CommonJS module.id variable
-declare var module: {id: string};
-
 @Component({
   moduleId: module.id,
   selector: 'login',

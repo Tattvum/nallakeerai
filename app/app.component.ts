@@ -11,8 +11,15 @@ import { MockbaseService } from './data/mockbase.service';
 import { SecurityService } from './security/security.service';
 import { User } from './security/user';
 
-//Let TypeScript know about the special CommonJS module.id variable
-declare var module: {id: string};
+/**
+ * ... declaring this once for all in typings/typings.d.ts (not in git)
+ * 
+ * Declares the 'commonjs' format module object that identifies the "module id" for the current module.
+ * Set a component's `moduleId` metadata property to `module.id` for module-relative urls
+ * when the generated module format is 'commonjs'.
+ * 
+  declare var module: {id: string};
+ */
 
 @Component({
   moduleId: module.id,
@@ -28,8 +35,8 @@ declare var module: {id: string};
 ])
 export class AppComponent implements OnInit {
   //IMPORTANT TBD 3A/4 - uncomment and use this in production deployment
-  //user: User = null;
-  user: User = {uid: "", email: "testing...", token:""};
+  user: User = null;
+  //user: User = {uid: "", email: "testing...", token:"hghgh"};
 
   constructor(private router: Router, private service: SecurityService) {
     service.authenticated$.subscribe( user => this.user = user );

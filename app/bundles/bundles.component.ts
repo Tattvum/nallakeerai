@@ -2,9 +2,6 @@ import { Component, Input, ViewChild, ElementRef, NgZone, Renderer } from '@angu
 
 import { DataService, TimeMode }   from '../data/data.service';
 
-//Let TypeScript know about the special CommonJS module.id variable
-declare var module: {id: string};
-
 @Component({
   moduleId: module.id,
   selector: 'bundles',
