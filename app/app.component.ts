@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, provide } from '@angular/core';
 import { RouteConfig, Router, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 
 import { WhenComponent } from './when/when.component';
@@ -8,6 +8,8 @@ import { LoginComponent } from './security/login.component';
 import { DataService } from './data/data.service';
 import { FirebaseService } from './data/firebase.service';
 import { MockbaseService } from './data/mockbase.service';
+import { BaseService } from './data/base.service';
+
 import { SecurityService } from './security/security.service';
 import { User } from './security/user';
 
@@ -27,7 +29,9 @@ import { User } from './security/user';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.css'],
   directives: [ROUTER_DIRECTIVES, WhenComponent],
-  providers: [DataService, FirebaseService,, MockbaseService, SecurityService],
+  providers: [DataService, 
+      provide(BaseService, {useClass:    MockbaseService}), 
+      MockbaseService, SecurityService],
 })
 @RouteConfig([
   { path: '/login', name: 'Login', component: LoginComponent },

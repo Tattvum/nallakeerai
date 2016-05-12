@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable }     from 'rxjs/Observable';
 import { Harvest }     from './harvest';
+import { BaseService }     from './base.service';
 
 class Container {
   constructor(public arr: any[] = [], public obj: any = {}){};
@@ -11,7 +12,7 @@ function log(msg: any, obj: any = "") {
 }
 
 @Injectable()
-export class MockbaseService {
+export class MockbaseService extends BaseService {
   private f = new Container();
   private p = new Container();
 
@@ -22,6 +23,7 @@ export class MockbaseService {
   }
   
   constructor() {
+    super();
     [1,2].forEach(id => this.addThing({code: "farm" + id}, this.f));
     [1,2,3,5].forEach(id => this.addThing({code: "plant" + id}, this.p));
     let DAYS = ["2016-05-01", "2016-05-02", "2016-05-03"];

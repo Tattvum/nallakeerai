@@ -1,16 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Subject}    from 'rxjs/Subject';
 
-import { FirebaseService }     from '../data/firebase.service';
-import { MockbaseService }     from '../data/mockbase.service';
+import { BaseService }     from '../data/base.service';
+
 import { User }     from './user';
 
 @Injectable()
 export class SecurityService {
 
-  //IMPORTANT TBD 3C/4 - uncomment and use this in production deployment
-  constructor(private service: FirebaseService) {}
-  //constructor(private service: MockbaseService) {}
+  constructor(private service: BaseService) {}
 
   private user: User = null;
   

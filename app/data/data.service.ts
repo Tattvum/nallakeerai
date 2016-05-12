@@ -3,8 +3,7 @@ import {Injectable} from '@angular/core';
 import { Thing }   from './thing';
 import { Harvest }   from './harvest';
 
-import { FirebaseService }   from './firebase.service';
-import { MockbaseService }   from './mockbase.service';
+import { BaseService }   from './base.service';
 
 
 export const enum DOW { MON, TUE, WED, THU, FRI, SAT, SUN }
@@ -97,9 +96,7 @@ export class DataService {
 
 //--------------------------------------------------------------------------------------
 
-  //IMPORTANT TBD 4/4 - - uncomment and use this in production deployment
-  //constructor(private service: FirebaseService) {
-  constructor(private service: MockbaseService) {
+  constructor(private service: BaseService) {
     this.now();
   }
 

@@ -3,13 +3,14 @@ import {Http, Response} from '@angular/http';
 import {Observable}     from 'rxjs/Observable';
 
 import { Harvest }     from './harvest';
+import { BaseService }     from './base.service';
 
 function log(msg: any, obj: any = "") {
   console.log(msg, obj);
 }
 
 @Injectable()
-export class FirebaseService {
+export class FirebaseService extends BaseService {
 
   //IMPORTANT TBD 1/4 - uncomment and use this in production deployment
   //private _url = 'https://nallakeerai-nsp.firebaseio.com';
@@ -17,6 +18,7 @@ export class FirebaseService {
   private fbRoot: any = null;
 
   constructor(private http: Http) {
+    super();
     //oh this calls server even when the object is just created
     this.fbRoot = new Firebase(this._url);
   }
