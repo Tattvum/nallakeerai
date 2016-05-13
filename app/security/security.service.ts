@@ -25,5 +25,4 @@ export class SecurityService {
     return p;
   }
 
-
 }

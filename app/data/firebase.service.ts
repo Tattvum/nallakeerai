@@ -1,9 +1,10 @@
-import {Injectable} from '@angular/core';
-import {Http, Response} from '@angular/http';
-import {Observable}     from 'rxjs/Observable';
+import { Injectable, Inject } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable }     from 'rxjs/Observable';
 
 import { Harvest }     from './harvest';
 import { BaseService }     from './base.service';
+import { FB_URL }     from '../common';
 
 function log(msg: any, obj: any = "") {
   console.log(msg, obj);
@@ -12,20 +13,20 @@ function log(msg: any, obj: any = "") {
 @Injectable()
 export class FirebaseService extends BaseService {
 
-  //IMPORTANT TBD 1/4 - uncomment and use this in production deployment
-  //private _url = 'https://nallakeerai-nsp.firebaseio.com';
-  private _url = 'https://sizzling-heat-796.firebaseio.com/testroot';
+  private _url = null;
   private fbRoot: any = null;
 
-  constructor(private http: Http) {
+  constructor(private http: Http, 
+        @Inject(FB_URL) private fbURL: string) {
+          
     super();
-    //oh this calls server even when the object is just created
+    //WOW: injected url, so it can change during dev testing and production
+    this._url = fbURL;
+    //WHY: oh this calls server even when the object is just created
     this.fbRoot = new Firebase(this._url);
   }
 
-  //IMPORTANT TBD 3B/4 - uncomment and use this in production deployment
   private auth: any;
-  //private auth = {password: {email: "testing..."}};
 
   private url(suffix: string): string {
     let url = this._url + "/" + suffix + ".json?auth=" + this.auth.token;
@@ -68,14 +69,9 @@ export class FirebaseService extends BaseService {
     query.once("value", snap => {
       log(snap.val());
     });
-/*
-    this.firebaseQuery().then((obj)=>{
-      log(obj);
-    });
-*/
   }
 
-  authenticate(email: string, password: string): Promise<any> {
+  protected authenticateInternal(email: string, password: string): Promise<any> {
     let self = this;
     let fbr = this.fbRoot;
     return new Promise(function (resolve, reject) {

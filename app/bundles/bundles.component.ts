@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, NgZone, Renderer } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, NgZone, Renderer, OnInit } from '@angular/core';
 
 import { DataService, TimeMode }   from '../data/data.service';
 
@@ -8,7 +8,7 @@ import { DataService, TimeMode }   from '../data/data.service';
   templateUrl: 'bundles.component.html',
   styleUrls: ['bundles.component.css'],
 })
-export class BundlesComponent {
+export class BundlesComponent implements OnInit {
   private all;
   quantity: number = 0;
   private farm: string;
@@ -17,7 +17,9 @@ export class BundlesComponent {
 
   @ViewChild('editor') editor: ElementRef;
 
-  constructor(private service: DataService, private ngZone: NgZone, private renderer: Renderer) {
+  constructor(private service: DataService, private ngZone: NgZone, private renderer: Renderer) {}
+
+  ngOnInit() {
     this.service.getAll().then(_all => {
       this.all = _all;
     });
@@ -46,6 +48,7 @@ export class BundlesComponent {
   }
 
   private focusEditor() {
+    //NOTE:
     //http://stackoverflow.com/questions/34502768/why-angular2-template-local-variables-are-not-usable-in-templates-when-using-ng
     //http://angularjs.blogspot.in/2016/04/5-rookie-mistakes-to-avoid-with-angular.html
     this.ngZone.runOutsideAngular(() => {

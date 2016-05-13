@@ -97,9 +97,12 @@ export class DataService {
 //--------------------------------------------------------------------------------------
 
   constructor(private service: BaseService) {
-    this.now();
+    service.addAuthListeners(()=> {
+      log('authListener called!');
+      this.now()
+    });
   }
-
+  
 //--------------------------------------------------------------------------------------
 
   private setup(): Promise<any> {
@@ -126,7 +129,8 @@ export class DataService {
     let n = (this.getTimeMode() == TimeMode.DAY)? 1 : 7;
     HARVEST_LOG = [];//DELETE ALL AND FETCH ALL FRESH !! - for now
     let p = Promise.resolve();
-    for (let i = 0; i < n; i++) {//NOTE: use let hear, not var!
+    //NOTE: WHY: TBD: use let hear, not var!
+    for (let i = 0; i < n; i++) {
       p = p.then(()=>{
         let dt = DataService.moveDate(this.date, i);
         let day = DataService.dayString(dt);

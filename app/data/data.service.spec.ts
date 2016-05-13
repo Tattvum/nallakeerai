@@ -122,7 +122,7 @@ describe('DataService', () => {
   beforeEachProviders(() => [MockbaseService, DataService]);
 
   it('harvest DAY grid computation is fine', inject([DataService], (s: DataService) => {
-    //NOTE: by default it will be in DAY mode!
+    //DEFAULT: by default it will be in DAY mode!
     expect(s.getTimeMode()).toEqual(TimeMode.DAY);
     //timeout is a hack to circumvent uncontrolled async calls in service constructor 
     return gap().then(()=>{

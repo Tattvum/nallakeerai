@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Observable }     from 'rxjs/Observable';
 import { Harvest }     from './harvest';
 import { BaseService }     from './base.service';
+import { NO_LOGIN }     from '../common';
 
 class Container {
   constructor(public arr: any[] = [], public obj: any = {}){};
@@ -11,6 +12,7 @@ function log(msg: any, obj: any = "") {
   //console.log(msg, obj);
 }
 
+//NOTE: This is for dev testing purpose only.
 @Injectable()
 export class MockbaseService extends BaseService {
   private f = new Container();
@@ -64,7 +66,11 @@ export class MockbaseService extends BaseService {
 
   private auth: any = {uid: "123", email: "test", token: "xyz"};
  
-  authenticate(email: string, password: string): Promise<any> {
+  private authenticateDummy(): Promise<any> {
+    return this.authenticateInternal('test', 'test');
+  }
+  
+  protected authenticateInternal(email: string, password: string): Promise<any> {
     if(email === "test")
       if(password == "test") return Promise.resolve(this.auth);
       else return Promise.reject("INVALID PASSWORD!"); 

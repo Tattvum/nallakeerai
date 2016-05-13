@@ -1,4 +1,4 @@
-import { Component, OnInit, provide } from '@angular/core';
+import { Component, OnInit, provide, Inject } from '@angular/core';
 import { RouteConfig, Router, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 
 import { WhenComponent } from './when/when.component';
@@ -12,6 +12,7 @@ import { BaseService } from './data/base.service';
 
 import { SecurityService } from './security/security.service';
 import { User } from './security/user';
+import { NO_LOGIN, FB_URL } from './common';
 
 /**
  * ... declaring this once for all in typings/typings.d.ts (not in git)
@@ -23,26 +24,55 @@ import { User } from './security/user';
   declare var module: {id: string};
  */
 
+/**
+ * NOTE: DI modes
+ * DEVELOPMENT -
+ *    BaseService = MockbaseService
+ *    NO_LOGIN = true
+ *    FB_URL = <any>
+ * STAGING -
+ *    BaseService = FirebaseService
+ *    NO_LOGIN = false
+ *    FB_URL = 'https://sizzling-heat-796.firebaseio.com/testroot'
+ * PRODUCTION -
+ *    BaseService = FirebaseService
+ *    NO_LOGIN = false
+ *    FB_URL = 'https://nallakeerai-nsp.firebaseio.com'
+ */
+
+/**
+ * mode: DEVELOPMENT
+ */
+
 @Component({
   moduleId: module.id,
   selector: 'app',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.css'],
   directives: [ROUTER_DIRECTIVES, WhenComponent],
+  //NOTE: https://angular.io/docs/ts/latest/api/core/OpaqueToken-class.html
   providers: [DataService, 
-      provide(BaseService, {useClass:    MockbaseService}), 
-      MockbaseService, SecurityService],
+    //IMPORTANT TBD 3/5 - uncomment and use this in production deployment
+    provide(FB_URL, {useValue: 'https://nallakeerai-nsp.firebaseio.com'}),
+    //provide(FB_URL, {useValue: 'https://sizzling-heat-796.firebaseio.com/testroot'}),
+    //IMPORTANT TBD 4/5 - uncomment and use this in production deployment
+    provide(NO_LOGIN, {useValue: true}),
+    //provide(NO_LOGIN, {useValue: false}),
+    //IMPORTANT TBD 5/5 - uncomment and use this in production deployment
+    provide(BaseService, {useClass:    MockbaseService}), 
+    //provide(BaseService, {useClass:    FirebaseService}), 
+    SecurityService
+  ],
 })
 @RouteConfig([
   { path: '/login', name: 'Login', component: LoginComponent },
   { path: '/all', name: 'Main', component: BundlesComponent },
 ])
 export class AppComponent implements OnInit {
-  //IMPORTANT TBD 3A/4 - uncomment and use this in production deployment
   user: User = null;
-  //user: User = {uid: "", email: "testing...", token:"hghgh"};
 
-  constructor(private router: Router, private service: SecurityService) {
+  constructor(private router: Router, 
+      private service: SecurityService) {
     service.authenticated$.subscribe( user => this.user = user );
   }
 
