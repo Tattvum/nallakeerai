@@ -71,13 +71,25 @@ import { NO_LOGIN, FB_URL } from './common';
 export class AppComponent implements OnInit {
   user: User = null;
 
+  //NOTE: only for dev testing purpose.
+  private dummyLogin() {
+    this.service.authenticate("test", "test");
+  }
+
   constructor(private router: Router, 
+      @Inject(NO_LOGIN) private noLogin: boolean,
       private service: SecurityService) {
-    service.authenticated$.subscribe( user => this.user = user );
+    service.authenticated$.subscribe( user => {
+      //console.log(user);
+      this.user = user 
+    });
+    //NOTE: only for dev testing purpose.
+    if(this.noLogin) this.dummyLogin();
   }
 
   ngOnInit() {
-    if (this.user != null) this.router.navigate(['Main']);
+    //NOTE: only for dev testing purpose.
+    if (this.user != null || this.noLogin) this.router.navigate(['Main']);
     else this.router.navigate(['Login']);
   }
 }

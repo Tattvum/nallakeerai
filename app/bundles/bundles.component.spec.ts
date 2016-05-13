@@ -15,8 +15,10 @@ import {
 } from '@angular/compiler/testing';
 
 import { DataService } from '../data/data.service';
-import { MockbaseService } from '../data/mockbase.service';
 import { BundlesComponent } from './bundles.component';
+import { NO_LOGIN } from '../common';
+import { BaseService } from '../data/base.service';
+import { MockbaseService } from '../data/mockbase.service';
 
 import { Component, Input, provide } from '@angular/core';
 
@@ -25,7 +27,7 @@ import { Component, Input, provide } from '@angular/core';
 type TCB = TestComponentBuilder;
 
 function log(msg: any, obj: any = "") {
-  //console.log(msg, obj);
+  console.log(msg, obj);
 }
 
 //setTimeout that returns a promise
@@ -47,7 +49,11 @@ type CF = ComponentFixture<BundlesComponent>;
 
 describe('Bundles', () => {
 
-  beforeEachProviders(() => [DataService, MockbaseService]);
+  beforeEachProviders(() => [
+    provide(NO_LOGIN, {useValue: true}),
+    provide(BaseService, {useClass: MockbaseService}), 
+    DataService,
+  ]);
 
   let tcb;
   let fix;
@@ -75,7 +81,7 @@ describe('Bundles', () => {
       element = fix.nativeElement;
       comp = fix.componentRef.instance; 
       expect(true).toBe(true);
-      //A hack to wait for all to be loaded
+      //HACK: A hack to wait for all to be loaded
       return gap().then(()=> {
 
         fix.detectChanges();

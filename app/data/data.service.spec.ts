@@ -13,6 +13,8 @@ import {
 } from '@angular/core/testing';
 
 import { DataService, TimeMode, DOW } from './data.service';
+import { NO_LOGIN } from '../common';
+import { BaseService } from './base.service';
 import { MockbaseService } from './mockbase.service';
 
 //-----------------------------------------------------------------------------
@@ -119,7 +121,11 @@ function rectAdd(s: DataService): Promise<any> {
 
 describe('DataService', () => {
 
-  beforeEachProviders(() => [MockbaseService, DataService]);
+  beforeEachProviders(() => [
+    provide(NO_LOGIN, {useValue: true}),
+    provide(BaseService, {useClass: MockbaseService}), 
+    DataService,
+  ]);
 
   it('harvest DAY grid computation is fine', inject([DataService], (s: DataService) => {
     //DEFAULT: by default it will be in DAY mode!

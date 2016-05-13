@@ -9,7 +9,7 @@ class Container {
 }
 
 function log(msg: any, obj: any = "") {
-  //console.log(msg, obj);
+  console.log(msg, obj);
 }
 
 //NOTE: This is for dev testing purpose only.
@@ -26,6 +26,7 @@ export class MockbaseService extends BaseService {
   
   constructor() {
     super();
+    //log('MockbaseService called');
     [1,2].forEach(id => this.addThing({code: "farm" + id}, this.f));
     [1,2,3,5].forEach(id => this.addThing({code: "plant" + id}, this.p));
     let DAYS = ["2016-05-01", "2016-05-02", "2016-05-03"];
@@ -64,7 +65,7 @@ export class MockbaseService extends BaseService {
 
 //-----------------------------------------------------------------------------
 
-  private auth: any = {uid: "123", email: "test", token: "xyz"};
+  protected auth: any = {uid: "123", email: "test", token: "xyz"};
  
   private authenticateDummy(): Promise<any> {
     return this.authenticateInternal('test', 'test');

@@ -16,13 +16,11 @@ export class SecurityService {
   authenticated$ = this.authenticated.asObservable();
 
   authenticate(email: string, password: string): Promise<any> {
-    let p = this.service.authenticate(email, password);
-    p.then((auth) => {
+    return this.service.authenticate(email, password).then((auth) => {
       this.user = new User(auth.uid, email, auth.token);
       //console.log(this.user);
       this.authenticated.next(this.user);
     });
-    return p;
   }
 
 }

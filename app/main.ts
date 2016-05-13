@@ -6,6 +6,6 @@ import { HTTP_PROVIDERS } from '@angular/http';
 import 'rxjs/Rx';
 
 //IMPORTANT TBD 2/5 - required for dev testing? uncomment in production!
-//enableProdMode();
+enableProdMode();
 
 bootstrap(AppComponent, [HTTP_PROVIDERS, ROUTER_PROVIDERS]);

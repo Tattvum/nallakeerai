@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, NgZone, Renderer, OnInit } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, NgZone, Renderer } from '@angular/core';
 
 import { DataService, TimeMode }   from '../data/data.service';
 
@@ -8,7 +8,7 @@ import { DataService, TimeMode }   from '../data/data.service';
   templateUrl: 'bundles.component.html',
   styleUrls: ['bundles.component.css'],
 })
-export class BundlesComponent implements OnInit {
+export class BundlesComponent {
   private all;
   quantity: number = 0;
   private farm: string;
@@ -17,12 +17,8 @@ export class BundlesComponent implements OnInit {
 
   @ViewChild('editor') editor: ElementRef;
 
-  constructor(private service: DataService, private ngZone: NgZone, private renderer: Renderer) {}
-
-  ngOnInit() {
-    this.service.getAll().then(_all => {
-      this.all = _all;
-    });
+  constructor(private service: DataService, private ngZone: NgZone, private renderer: Renderer) {
+    this.refresh();
   }
 
   bundle(farm: string, plant: string) {

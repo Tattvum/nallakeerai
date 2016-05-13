@@ -26,7 +26,7 @@ export class FirebaseService extends BaseService {
     this.fbRoot = new Firebase(this._url);
   }
 
-  private auth: any;
+  protected auth: any = null;
 
   private url(suffix: string): string {
     let url = this._url + "/" + suffix + ".json?auth=" + this.auth.token;

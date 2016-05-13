@@ -97,6 +97,7 @@ export class DataService {
 //--------------------------------------------------------------------------------------
 
   constructor(private service: BaseService) {
+    log('DataService constructor called');
     service.addAuthListeners(()=> {
       log('authListener called!');
       this.now()
