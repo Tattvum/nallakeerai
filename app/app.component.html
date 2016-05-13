@@ -1,12 +1,5 @@
-<!--
-<nav>
-  <a [routerLink]="['./Report']">Report</a>
-  <a [routerLink]="['./Farm', {path: 'null/Farms/Farm:3'}]">Farm</a>
-</nav>
--->
-<div *ngIf="user!=null" >
-  <when></when>
-  <span class="user">{{ user.email }}</span>
+<div class="row" *ngIf="user!=null" >
+  <when class="col-md-4"></when>
+  <span class="col-md-4 user">{{ user.email }}</span>
 </div>
-
-<router-outlet></router-outlet>
+<router-outlet class="row" ></router-outlet>

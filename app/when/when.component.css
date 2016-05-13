@@ -1,12 +1,21 @@
 
 button {
-  margin-top: 5px;
-  margin-left: 5px;
-  color: orangered;
+  margin: 1px;
   font-size: 16px;
 }
 
 .processing {
   margin-left: 5px;
   color: purple;
+}
+
+.container {
+  width: 300px;
+}
+
+.date {
+  font-size: 20px;
+  margin: 4px;
+  color: orangered;
+  text-align: center;
 }

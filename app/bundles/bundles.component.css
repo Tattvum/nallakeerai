@@ -11,10 +11,6 @@
   color: blue;
 }
 
-table {
-  max-width: 600px;
-}
-
 .data {
   text-align: center;
 }
@@ -75,5 +71,5 @@ table {
 }
 
 form {
-  max-width: 200px;
+  max-width: 400px;
 }

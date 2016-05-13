@@ -7,7 +7,7 @@ import { BaseService }   from './base.service';
 
 
 export const enum DOW { MON, TUE, WED, THU, FRI, SAT, SUN }
-export const enum TimeMode { DAY, WEEK }
+export const enum TimeMode { DAY, WEEK, MONTH }
 
 let HARVEST_LOG: Harvest[] = [];
 
@@ -50,8 +50,14 @@ export class DataService {
 
   showWhen(): string {
     let strdate = this.getDayString() +" ("+dows[this.date.getDay()]+")";
-    if(this.timeMode == TimeMode.DAY) return "D: "+strdate;
-    else return "W: "+strdate;
+    switch (this.timeMode) {
+      case TimeMode.DAY: return "D: "+strdate; 
+      case TimeMode.WEEK: return "W: "+strdate; 
+      case TimeMode.MONTH: return "M: "+strdate; 
+      default:
+        console.log('ERROR: unknown time mode: '+this.timeMode);
+        return "ERROR";
+    }
   }
 
   private getDayString(): string {
@@ -64,34 +70,44 @@ export class DataService {
     this.date.setDate(this.date.getDate() - dow);
   } 
   
-  toggleDayWeek(): Promise<any> {
-    if(this.timeMode == TimeMode.DAY) this.timeMode = TimeMode.WEEK;
-    else this.timeMode = TimeMode.DAY;  
-    this.goToLastMonday();//When you toggle you'll be on MON                       
+  private goToFirst() {
+    this.date.setDate(1);
+  } 
+  
+  setTimeMode(tm: TimeMode): Promise<any> {
+    this.timeMode = tm;
+    if(this.timeMode == TimeMode.WEEK) this.goToLastMonday();
+    else if(this.timeMode == TimeMode.MONTH) this.goToFirst();
     return this.setup();
   }
-  
+
   now(): Promise<any> {
     this.date = new Date();
     if(this.timeMode == TimeMode.WEEK) this.goToLastMonday();
+    else if(this.timeMode == TimeMode.MONTH) this.goToFirst();
     return this.setup();
   }
   
+  private moveDays(offset: number): Promise<any> {
+    this.date.setDate(this.date.getDate() + offset);
+    return this.setup();
+  }
+
+  private moveMonth(offset: number): Promise<any> {
+    this.date.setMonth(this.date.getMonth() + offset);
+    return this.setup();
+  }
+
   prev(): Promise<any> {
-    let offset = -1;
-    if(this.timeMode == TimeMode.WEEK) offset = -7;
-    return this.move(offset);
+    if(this.timeMode == TimeMode.DAY) return this.moveDays(-1);
+    else if(this.timeMode == TimeMode.WEEK) return this.moveDays(-7);
+    else if(this.timeMode == TimeMode.MONTH) return this.moveMonth(-1);
   }
   
   next(): Promise<any> {
-    let offset = 1;
-    if(this.timeMode == TimeMode.WEEK) offset = 7;
-    return this.move(offset);
-  }
-
-  private move(offset: number): Promise<any> {
-    this.date.setDate(this.date.getDate() + offset);
-    return this.setup();
+    if(this.timeMode == TimeMode.DAY) return this.moveDays(1);
+    else if(this.timeMode == TimeMode.WEEK) return this.moveDays(7);
+    else if(this.timeMode == TimeMode.MONTH) return this.moveMonth(1);
   }
 
 //--------------------------------------------------------------------------------------
@@ -126,15 +142,27 @@ export class DataService {
     });
   }
   
+  private endDate(): Date {
+    if(this.timeMode == TimeMode.DAY) 
+        return DataService.moveDate(this.date, 0);
+    else if(this.timeMode == TimeMode.WEEK) 
+        return DataService.moveDate(this.date, 6);
+    else {//assume month
+      let dt = new Date(this.date.getTime());
+      dt.setMonth(dt.getMonth() + 1);
+      dt.setDate(dt.getDate() - 1);
+      return dt;
+    }
+  }
+  
   private setupHarvestLogByTimeMode(): Promise<void> {
-    let n = (this.getTimeMode() == TimeMode.DAY)? 1 : 7;
     HARVEST_LOG = [];//DELETE ALL AND FETCH ALL FRESH !! - for now
     let startDay = DataService.dayString(this.date);
-    let dt1 = DataService.moveDate(this.date, n-1);
-    let endDay = DataService.dayString(dt1);
+    let dt = this.endDate();
+    let endDay = DataService.dayString(dt);
     return this.service.getHarvestLogs(startDay, endDay).then(obj => {
-      for (var p in obj) if (obj.hasOwnProperty(p))
-          for (var pp in obj[p]) if (obj[p].hasOwnProperty(pp))
+      if(obj != null) for (var p in obj) if (obj.hasOwnProperty(p))
+          if(obj[p] != null) for (var pp in obj[p]) if (obj[p].hasOwnProperty(pp))
               HARVEST_LOG.push(obj[p][pp]);
       //log("sHLs: "+startDay+" "+endDay);
       //log(HARVEST_LOG);
@@ -199,12 +227,12 @@ export class DataService {
   
   //harvest this day as in grid
   addHarvest(f: string, p: string, q: number): Promise<any> {
-    if(this.timeMode === TimeMode.WEEK) throw "Donot call this is in WEEK mode.";
+    if(this.timeMode !== TimeMode.DAY) throw "Call this in DAY mode only.";
     return this.addHarvestOnDay(this.getDayString(), f, p, q);
   }
 
   addHarvestInWeek(dow: DOW, f: string, p: string, q: number): Promise<any> {
-    if(this.timeMode === TimeMode.DAY) throw "Donot call this is in DAY mode.";
+    if(this.timeMode !== TimeMode.WEEK) throw "Call this in WEEK mode only.";
     let d = new Date(this.date.getTime());
     let offset = (d.getDay() -1 + 7) % 7;
     d.setDate(d.getDate() + offset + dow);
@@ -214,7 +242,7 @@ export class DataService {
   }
 
   addFarm(code: string): Promise<any> {
-    if(this.timeMode === TimeMode.WEEK) throw "Donot call this is in WEEK mode.";
+    if(this.timeMode !== TimeMode.DAY) throw "Call this in DAY mode only.";
     let farm = { code: code };
     log("ADD FARM: " + code);
     FARMS.push(farm);
@@ -223,7 +251,7 @@ export class DataService {
   }
 
   addPlant(code: string): Promise<any> {
-    if(this.timeMode === TimeMode.WEEK) throw "Donot call this is in WEEK mode.";
+    if(this.timeMode !== TimeMode.DAY) throw "Call this in DAY mode only.";
     let plant = { code: code };
     log("ADD PLANT: " + code);
     PLANTS.push(plant);

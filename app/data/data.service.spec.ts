@@ -184,9 +184,9 @@ describe('DataService', () => {
     //the timeout hack
     return gap().then(()=>{
     }).then(()=>{
-      log("< toggleDayWeek >");
+      log("< toggleTimeMode >");
       //go to the WEEK mode from the default DAY mode
-      return s.toggleDayWeek();
+      return s.setTimeMode(TimeMode.WEEK);
     }).then(()=>{
       log("< next >");
       //move 1 week in future
@@ -221,7 +221,7 @@ describe('DataService', () => {
     //the timeout hack 
     return gap().then(() => {
       //go to the WEEK mode from the default DAY mode
-      return s.toggleDayWeek();
+      return s.setTimeMode(TimeMode.WEEK);
     }).then(()=>{
       //move 10 weeks in future
       return s.next();
@@ -235,7 +235,7 @@ describe('DataService', () => {
       log('[ before day ] '+s.showWhen());
       rectCheck(s);      
       //go to the DAY mode from WEEK
-      return s.toggleDayWeek();
+      return s.setTimeMode(TimeMode.DAY);
     }).then(()=>{
       //we should be in MON so check d1 harvest is all fine
       rectCheckFull(s, 10, 0, 80, 0, 10, 80, 90, 0, 90);
@@ -250,7 +250,7 @@ describe('DataService', () => {
       rectCheckFull(s, 0, 40, 0, 20, 40, 20, 0, 60, 60);
     }).then(()=>{
       //go to the WEEK mode from DAY
-      return s.toggleDayWeek();
+      return s.setTimeMode(TimeMode.WEEK);
     }).then(()=>{
       //ensure fully that it is all same
       rectCheck(s);      

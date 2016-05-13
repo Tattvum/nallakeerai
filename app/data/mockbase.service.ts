@@ -12,6 +12,13 @@ function log(msg: any, obj: any = "") {
   //console.log(msg, obj);
 }
 
+//setTimeout that returns a promise
+function delay(ms: number): Promise<any> {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), ms);
+  });
+}
+
 //NOTE: This is for dev testing purpose only.
 @Injectable()
 export class MockbaseService extends BaseService {
@@ -79,7 +86,9 @@ export class MockbaseService extends BaseService {
       s = dt.toISOString().slice(0, 10);
     } while (s <= endDay);
     log(out);
-    return Promise.resolve(out); 
+    //return delay(400).then(()=>{
+      return Promise.resolve(out);
+    //}); 
   }
 
 //-----------------------------------------------------------------------------

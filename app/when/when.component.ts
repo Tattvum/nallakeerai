@@ -1,5 +1,5 @@
 import { Component, Input, Output } from '@angular/core';
-import { DataService }    from '../data/data.service';
+import { DataService, TimeMode }    from '../data/data.service';
 
 //Let TypeScript know about the special CommonJS module.id variable
 declare var module: {id: string};
@@ -27,12 +27,16 @@ export class WhenComponent {
       .catch(()=>{this.isProcessing= false});
   }
 
-  clickNow(event) {
+  private clickTimeMode(tm: TimeMode) {
     this.isProcessing= true;
-    this.service.toggleDayWeek()
+    this.service.setTimeMode(tm)
       .then(()=>{this.isProcessing= false})
       .catch(()=>{this.isProcessing= false});
   }
+
+  clickDAY() { this.clickTimeMode(TimeMode.DAY) }
+  clickWEEK() { this.clickTimeMode(TimeMode.WEEK) }
+  clickMONTH() { this.clickTimeMode(TimeMode.MONTH) }
 
   clickNext(event) {
     this.isProcessing= true;

@@ -35,12 +35,18 @@ export class BundlesComponent {
     return this.isDay() && (this.farm == farm || this.plant == plant);
   }
 
+  private tm() {
+    return this.service.getTimeMode();
+  }
+
   isDay(): boolean {
-    return this.service.getTimeMode() == TimeMode.DAY;
+    return this.tm() == TimeMode.DAY;
   }
 
   timeMode(): string {
-    return this.isDay() ? "Day Mode" : "Week mode";
+    if(this.tm() == TimeMode.DAY) return "Day";
+    else if(this.tm() == TimeMode.WEEK) return "Week";
+    else return "Month";
   }
 
   private focusEditor() {

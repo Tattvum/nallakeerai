@@ -1,7 +1,22 @@
-<button [disabled]="isProcessing" (click)="clickPrev($event)"> 
-  << </button>&nbsp;&nbsp;
-<button class="primary" [disabled]="isProcessing" (click)="clickNow($event)">
-  {{ showDay() }}</button>&nbsp;&nbsp;
-<button [disabled]="isProcessing" (click)="clickNext($event)"> 
-  >> </button>
-<span class="processing" *ngIf="isProcessing">processing...</span>
+
+<div class="container">
+  <div class="row">
+    <span class="col-xs-6">&nbsp;</span>
+    <span class="col-xs-4 processing" *ngIf="isProcessing">processing...</span>
+  </div>
+  <div class="row">
+    <button class="col-xs-2" [disabled]="isProcessing" (click)="clickPrev($event)"> 
+      << </button>
+    <button class="col-xs-2" [disabled]="isProcessing"
+        (click)="clickDAY()" > D </button>
+    <button class="col-xs-2" [disabled]="isProcessing" 
+        (click)="clickWEEK()" > W </button>
+    <button class="col-xs-2" [disabled]="isProcessing" 
+        (click)="clickMONTH()" > M </button>
+    <button class="col-xs-2" [disabled]="isProcessing" (click)="clickNext($event)"> 
+      >> </button>
+  </div>
+  <div class="row">
+    <div class="col-xs-10 date">{{ showDay() }}</div>
+  </div>
+</div>
