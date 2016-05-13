@@ -22,6 +22,10 @@ export abstract class BaseService {
   abstract addHarvest(harvest: Harvest): Promise<any>;
   abstract getHarvestLog(day: string): Promise<any>;
 
+  abstract getHarvestLogs(startDay: string, endDay: string): Promise<any>;
+
+//---------------------------------------------------------
+
   protected auth: any = null;
 
   /*final*/ public isAuthenticated(): boolean {

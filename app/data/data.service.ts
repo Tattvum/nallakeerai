@@ -21,7 +21,7 @@ let FARMS: { code: string }[] = [];
 let PLANTS: { code: string }[] = [];
 
 function log(msg: any, obj: any = "") {
-  //console.log(msg, obj);
+  console.log(msg, obj);
 }
 
 const dows = ['sun','mon','tue','wed','thu','fri','sat'];
@@ -129,31 +129,19 @@ export class DataService {
   private setupHarvestLogByTimeMode(): Promise<void> {
     let n = (this.getTimeMode() == TimeMode.DAY)? 1 : 7;
     HARVEST_LOG = [];//DELETE ALL AND FETCH ALL FRESH !! - for now
-    let p = Promise.resolve();
-    //NOTE: WHY: TBD: use let hear, not var!
-    for (let i = 0; i < n; i++) {
-      p = p.then(()=>{
-        let dt = DataService.moveDate(this.date, i);
-        let day = DataService.dayString(dt);
-        //log(this.getDayString()+" "+i+" "+day);
-        return this.setupHarvestLog(day);
-      });
-    }
-    return p;
-  }
-  
-  private setupHarvestLog(day: string): Promise<void> {
-    return this.service.getHarvestLog(day).then(obj => {
-      for (var p in obj) {
-        if (obj.hasOwnProperty(p)) {
-          HARVEST_LOG.push(obj[p]);
-        }
-      }
-      //log("sHL: "+day+" "+HARVEST_LOG.length);
+    let startDay = DataService.dayString(this.date);
+    let dt1 = DataService.moveDate(this.date, n-1);
+    let endDay = DataService.dayString(dt1);
+    return this.service.getHarvestLogs(startDay, endDay).then(obj => {
+      for (var p in obj) if (obj.hasOwnProperty(p))
+          for (var pp in obj[p]) if (obj[p].hasOwnProperty(pp))
+              HARVEST_LOG.push(obj[p][pp]);
+      //log("sHLs: "+startDay+" "+endDay);
+      //log(HARVEST_LOG);
       Promise.resolve();
     });
   }
-
+  
   private computeGrid() {
     this.zeroGrid();
 

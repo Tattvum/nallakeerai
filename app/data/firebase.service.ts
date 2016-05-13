@@ -22,6 +22,8 @@ export class FirebaseService extends BaseService {
     super();
     //WOW: injected url, so it can change during dev testing and production
     this._url = fbURL;
+    log(this._url);
+    
     //WHY: oh this calls server even when the object is just created
     this.fbRoot = new Firebase(this._url);
   }
@@ -48,6 +50,14 @@ export class FirebaseService extends BaseService {
   getPlants(): Promise<any> { return this.getThings("plants"); }
   getHarvestLog(day: string): Promise<any> { return this.getThings("harvest/" + day); }
 
+  getHarvestLogs(startDay: string, endDay: string): Promise<any> { 
+    let fb = new Firebase(this.url2("harvest"));
+    var query = fb.orderByKey().startAt(startDay).endAt(endDay);
+    return query.once("value").then((snap)=>{
+      return snap.val();
+    }, this.handleError);
+  }
+
   addThing(suffix: string, thing: any): Promise<any> {
     thing.when = { '.sv': 'timestamp' };
     thing.who = this.auth.password.email;
@@ -59,17 +69,13 @@ export class FirebaseService extends BaseService {
   addPlant(plant: any): Promise<any> { return this.addThing("plants", plant); }
   addHarvest(harvest: any): Promise<any> { return this.addThing("harvest/" + harvest.day, harvest); }
 
-  private firebaseQuery(): Promise<any> {
-    return this.http.get(this.url("harvest")).toPromise().then(res => res.json(), this.handleError);
-  }
-
   private checkFirebaseQuery() {
-    let fb = new Firebase(this.url2("harvest"));
-    var query = fb.orderByKey().startAt("2016-05-05").endAt("2016-05-07");
-    query.once("value", snap => {
-      log(snap.val());
+    this.getHarvestLogs("2016-05-04", "2016-05-09").then((obj)=>{
+      log(obj);
     });
   }
+
+//---------------------------------------------------------
 
   protected authenticateInternal(email: string, password: string): Promise<any> {
     let self = this;

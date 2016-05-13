@@ -9,7 +9,7 @@ class Container {
 }
 
 function log(msg: any, obj: any = "") {
-  console.log(msg, obj);
+  //console.log(msg, obj);
 }
 
 //NOTE: This is for dev testing purpose only.
@@ -61,7 +61,26 @@ export class MockbaseService extends BaseService {
     return Promise.resolve();
   }
 
-  getHarvestLog(day: string) { return Promise.resolve(this.harvestLog[day]); }
+  getHarvestLog(day: string): Promise<any> { 
+    return Promise.resolve(this.harvestLog[day]); 
+  }
+
+  //NOTE: day should be in ISO CCYY-MM-DD format and trimmed
+  getHarvestLogs(startDay: string, endDay: string): Promise<any> {
+    if(endDay < startDay) return Promise.reject("ERROR: "+startDay +" !< "+ endDay);
+    //NOTE: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse#Browser_compatibility
+    let dt = new Date(startDay);
+    let out = {};
+    let s = dt.toISOString().slice(0, 10);
+    do {
+      let obj = this.harvestLog[s];    
+      if(obj != null) out[s] = obj;
+      dt.setDate(dt.getDate()+1);
+      s = dt.toISOString().slice(0, 10);
+    } while (s <= endDay);
+    log(out);
+    return Promise.resolve(out); 
+  }
 
 //-----------------------------------------------------------------------------
 
@@ -73,8 +92,9 @@ export class MockbaseService extends BaseService {
   
   protected authenticateInternal(email: string, password: string): Promise<any> {
     if(email === "test")
-      if(password == "test") return Promise.resolve(this.auth);
-      else return Promise.reject("INVALID PASSWORD!"); 
+      if(password == "test") {
+        return Promise.resolve(this.auth);
+      } else return Promise.reject("INVALID PASSWORD!"); 
     else return Promise.reject("INVALID EMAIL!"); 
   }
 
