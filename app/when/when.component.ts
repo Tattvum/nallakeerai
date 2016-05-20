@@ -1,11 +1,8 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component, Input, Output } from 'angular2/core';
 import { DataService, TimeMode }    from '../data/data.service';
 
-//Let TypeScript know about the special CommonJS module.id variable
-declare var module: {id: string};
-
 @Component({
-  moduleId: module.id,
+  moduleId: __moduleName,
   selector: 'when',
   templateUrl: 'when.component.html',
   styleUrls: ['when.component.css'],

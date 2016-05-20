@@ -7,12 +7,12 @@ import {
   it, xit,
   inject,
   injectAsync
-} from '@angular/core/testing';
+} from 'angular2/testing';
 
 import {
   ComponentFixture,
   TestComponentBuilder,
-} from '@angular/compiler/testing';
+} from 'angular2/testing';
 
 import { DataService } from '../data/data.service';
 import { BundlesComponent } from './bundles.component';
@@ -20,7 +20,7 @@ import { NO_LOGIN } from '../common';
 import { BaseService } from '../data/base.service';
 import { MockbaseService } from '../data/mockbase.service';
 
-import { Component, Input, provide } from '@angular/core';
+import { Component, Input, provide } from 'angular2/core';
 
 //-----------------------------------------------------------------------------
 

@@ -5,31 +5,25 @@
   <title>Nallakeerai NSP Harvest</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!--
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-  IMPORTANT TBD 2/4 - uncomment and use this in production deployment (also ensure latest version)
--->
+  <!--
+  IMPORTANT TBD 1A/5 - uncomment and use this in production deployment (also ensure latest version)
   <link rel="stylesheet" href="https://npmcdn.com/bootstrap@3.3.6/dist/css/bootstrap.min.css">
+  -->
 
   <link rel="stylesheet" href="styles.css">
 
   <!-- 1. Load libraries -->
   <!-- IE required polyfills, in this exact order -->
-
-<!--
   <script src="node_modules/es6-shim/es6-shim.min.js"></script>
-  <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
-  <script src="node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
-  <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+  <script src="node_modules/zone.js/dist/zone.js"></script>
+  <script src="node_modules/reflect-metadata/Reflect.js"></script>
   <script src="node_modules/systemjs/dist/system.src.js"></script>
-  <script src="node_modules/rxjs/bundles/Rx.js"></script>
-  <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
-  <script src="node_modules/angular2/bundles/router.dev.js"></script>
-  <script src="node_modules/angular2/bundles/http.dev.js"></script>
+
   <script src="node_modules/firebase/lib/firebase-web.js"></script>
 
-  IMPORTANT TBD 2/4 - uncomment and use this in production deployment (also ensure latest version)
--->
+  <!--
+  IMPORTANT TBD 1B/5 - uncomment and use this in production deployment (also ensure latest version)
 
   <script src="https://npmcdn.com/es6-shim@0.35.0/es6-shim.min.js"></script>
   <script src="https://npmcdn.com/systemjs@0.19.24/dist/system-polyfills.js"></script>
@@ -41,22 +35,17 @@
   <script src="https://npmcdn.com/angular2@2.0.0-beta.17/bundles/router.dev.js"></script>
   <script src="https://npmcdn.com/angular2@2.0.0-beta.17/bundles/http.dev.js"></script>
   <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+  -->
 
   <!-- 2. Configure SystemJS -->
+  <script src="systemjs.config.js"></script>
   <script>
-    System.config({
-        packages: {        
-          app: {
-            format: 'register',
-            defaultExtension: 'js'
-          }
-        }
-      });
-    System.import('app/main').then(null, console.error.bind(console));
+    System.import('app').catch(function(err){ console.error(err);  });
   </script>
 </head>
 
 <!-- 3. Display the application -->
+
 <body>
   <app>Loading...</app>
 </body>

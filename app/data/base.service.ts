@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from 'angular2/core';
 import { Observable }     from 'rxjs/Observable';
 import { Harvest }     from './harvest';
 
 function log(msg: any, obj: any = "") {
-  console.log(msg, obj);
+  //console.log(msg, obj);
 }
 
 @Injectable()

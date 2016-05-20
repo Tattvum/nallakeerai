@@ -1,5 +1,5 @@
-import { Injectable, Inject } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Injectable, Inject } from 'angular2/core';
+import { Http, Response } from 'angular2/http';
 import { Observable }     from 'rxjs/Observable';
 
 import { Harvest }     from './harvest';
@@ -7,7 +7,7 @@ import { BaseService }     from './base.service';
 import { FB_URL }     from '../common';
 
 function log(msg: any, obj: any = "") {
-  console.log(msg, obj);
+  //console.log(msg, obj);
 }
 
 @Injectable()

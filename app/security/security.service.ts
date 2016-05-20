@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable} from 'angular2/core';
 import {Subject}    from 'rxjs/Subject';
 
 import { BaseService }     from '../data/base.service';

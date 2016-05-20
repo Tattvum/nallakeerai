@@ -1,5 +1,5 @@
-import { Component, OnInit, provide, Inject } from '@angular/core';
-import { RouteConfig, Router, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
+import { Component, OnInit, provide, Inject } from 'angular2/core';
+import { RouteConfig, Router, ROUTER_DIRECTIVES } from 'angular2/router';
 
 import { WhenComponent } from './when/when.component';
 import { BundlesComponent } from './bundles/bundles.component';
@@ -20,9 +20,14 @@ import { NO_LOGIN, FB_URL } from './common';
  * Declares the 'commonjs' format module object that identifies the "module id" for the current module.
  * Set a component's `moduleId` metadata property to `module.id` for module-relative urls
  * when the generated module format is 'commonjs'.
+ *
+ * declare var module: {id: string};
  * 
-  declare var module: {id: string};
- */
+ * Declares the 'system' format string that identifies the "module id" for the current module.
+ * Set a component's `moduleId` metadata property to `__moduleName` for module-relative urls
+ * when the generated module format is 'system'.
+ * declare var __moduleName: string; 
+*/
 
 /**
  * NOTE: DI modes
@@ -45,7 +50,7 @@ import { NO_LOGIN, FB_URL } from './common';
  */
 
 @Component({
-  moduleId: module.id,
+  moduleId: __moduleName,
   selector: 'app',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.css'],

@@ -1,9 +1,9 @@
-import { Component, Input, ViewChild, ElementRef, NgZone, Renderer } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, NgZone, Renderer } from 'angular2/core';
 
 import { DataService, TimeMode }   from '../data/data.service';
 
 @Component({
-  moduleId: module.id,
+  moduleId: __moduleName,
   selector: 'bundles',
   templateUrl: 'bundles.component.html',
   styleUrls: ['bundles.component.css'],

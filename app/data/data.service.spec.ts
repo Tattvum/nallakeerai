@@ -1,6 +1,5 @@
-import {Injector, provide} from '@angular/core';
-import {Http, BaseRequestOptions} from '@angular/http';
-import {MockBackend} from '@angular/http/testing';
+import {Injector, provide} from 'angular2/core';
+import {Http, BaseRequestOptions} from 'angular2/http';
 
 import {
   beforeEach,
@@ -10,7 +9,7 @@ import {
   it, xit,
   inject,
   injectAsync
-} from '@angular/core/testing';
+} from 'angular2/testing';
 
 import { DataService, TimeMode, DOW } from './data.service';
 import { NO_LOGIN } from '../common';

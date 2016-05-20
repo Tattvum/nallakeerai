@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable} from 'angular2/core';
 
 import { Thing }   from './thing';
 import { Harvest }   from './harvest';
@@ -21,7 +21,7 @@ let FARMS: { code: string }[] = [];
 let PLANTS: { code: string }[] = [];
 
 function log(msg: any, obj: any = "") {
-  console.log(msg, obj);
+  //console.log(msg, obj);
 }
 
 const dows = ['sun','mon','tue','wed','thu','fri','sat'];

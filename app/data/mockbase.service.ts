@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject } from 'angular2/core';
 import { Observable }     from 'rxjs/Observable';
 import { Harvest }     from './harvest';
 import { BaseService }     from './base.service';

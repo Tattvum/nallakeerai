@@ -6,7 +6,7 @@ import {
   it,
   inject,
   injectAsync
-} from '@angular/core/testing';
+} from 'angular2/testing';
 
 import { MockbaseService } from './mockbase.service';
 
