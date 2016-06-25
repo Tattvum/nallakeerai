@@ -45,7 +45,7 @@ function gap(): Promise<any> {
 
 //-----------------------------------------------------------------------------
 
-type CF = ComponentFixture<BundlesComponent>;
+type CF = ComponentFixture;
 
 describe('Bundles', () => {
 
