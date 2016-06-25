@@ -58,11 +58,11 @@ import { NO_LOGIN, FB_URL } from './common';
   //NOTE: https://angular.io/docs/ts/latest/api/core/OpaqueToken-class.html
   providers: [DataService, 
     //provide(FB_URL, {useValue: 'https://nallakeerai-nsp.firebaseio.com'}),
-    provide(FB_URL, {useValue: 'https://sizzling-heat-796.firebaseio.com/testroot'}),
-    //provide(NO_LOGIN, {useValue: true}),
-    provide(NO_LOGIN, {useValue: false}),
-    //provide(BaseService, {useClass:    MockbaseService}), 
-    provide(BaseService, {useClass:    FirebaseService}), 
+    //provide(FB_URL, {useValue: 'https://sizzling-heat-796.firebaseio.com/testroot'}),
+    provide(NO_LOGIN, {useValue: true}),
+    //provide(NO_LOGIN, {useValue: false}),
+    provide(BaseService, {useClass:    MockbaseService}), 
+    //provide(BaseService, {useClass:    FirebaseService}), 
     SecurityService
   ],
 })

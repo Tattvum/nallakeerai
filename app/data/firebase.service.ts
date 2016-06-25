@@ -7,7 +7,7 @@ import { BaseService }     from './base.service';
 import { FB_URL }     from '../common';
 
 function log(msg: any, obj: any = "") {
-  //console.log(msg, obj);
+  console.log(msg, obj);
 }
 
 @Injectable()

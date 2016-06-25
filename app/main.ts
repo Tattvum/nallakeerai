@@ -5,7 +5,9 @@ import { ROUTER_PROVIDERS } from 'angular2/router';
 import { HTTP_PROVIDERS } from 'angular2/http';
 import 'rxjs/Rx';
 
+import { DummyComponent } from './common/dummy.component';
+
 //IMPORTANT TBD 2/5 - required for dev testing? uncomment in production?!
 enableProdMode();
 
-bootstrap(AppComponent, [HTTP_PROVIDERS, ROUTER_PROVIDERS]);
+bootstrap(DummyComponent, [HTTP_PROVIDERS, ROUTER_PROVIDERS]);
