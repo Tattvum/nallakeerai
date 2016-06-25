@@ -57,13 +57,10 @@ import { NO_LOGIN, FB_URL } from './common';
   directives: [ROUTER_DIRECTIVES, WhenComponent],
   //NOTE: https://angular.io/docs/ts/latest/api/core/OpaqueToken-class.html
   providers: [DataService, 
-    //IMPORTANT TBD 3/5 - uncomment and use this in production deployment
-    provide(FB_URL, {useValue: 'https://nallakeerai-nsp.firebaseio.com'}),
-    //provide(FB_URL, {useValue: 'https://sizzling-heat-796.firebaseio.com/testroot'}),
-    //IMPORTANT TBD 4/5 - uncomment and use this in production deployment
+    //provide(FB_URL, {useValue: 'https://nallakeerai-nsp.firebaseio.com'}),
+    provide(FB_URL, {useValue: 'https://sizzling-heat-796.firebaseio.com/testroot'}),
     //provide(NO_LOGIN, {useValue: true}),
     provide(NO_LOGIN, {useValue: false}),
-    //IMPORTANT TBD 5/5 - uncomment and use this in production deployment
     //provide(BaseService, {useClass:    MockbaseService}), 
     provide(BaseService, {useClass:    FirebaseService}), 
     SecurityService
